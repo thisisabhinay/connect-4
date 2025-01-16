@@ -1,0 +1,87 @@
+diff --git a/apps/game/package.json b/apps/game/package.json
+index 77fe6ec..e7de40e 100644
+--- a/apps/game/package.json
++++ b/apps/game/package.json
+@@ -10,6 +10,7 @@
+   },
+   "dependencies": {
+     "axios": "^1.7.9",
++    "clsx": "^2.1.1",
+     "next": "15.1.4",
+     "react": "^19.0.0",
+     "react-dom": "^19.0.0"
+diff --git a/apps/game/src/app/page.tsx b/apps/game/src/app/page.tsx
+index 92dd85e..bf8bbf0 100644
+--- a/apps/game/src/app/page.tsx
++++ b/apps/game/src/app/page.tsx
+@@ -1,10 +1,13 @@
+ "use client";
+ 
++import { GameBoard } from "@/components/game-board";
++import { GameResource } from "@/types/game";
+ import axios from "axios";
+-import { useEffect } from "react";
++import { useEffect, useState } from "react";
+ 
+ const API_URL = "/api/save-game";
+ export default function Home() {
++  const [game, setGame] = useState<GameResource>();
+   useEffect(() => {
+     axios
+       .post(API_URL, {
+@@ -16,8 +19,15 @@ export default function Home() {
+         ],
+         lastPlayer: 1,
+       })
+-      .then(({ data }) => console.log(data.game));
++      .then(({ data }) => setGame(data.game));
+   }, []);
+ 
+-  return <main></main>;
++  return (
++    <main
++      data-comp="Home"
++      className="bg-slate-100 h-screen flex items-center justify-center"
++    >
++      <GameBoard game={game} />
++    </main>
++  );
+ }
+diff --git a/apps/game/src/components/game-board.tsx b/apps/game/src/components/game-board.tsx
+new file mode 100644
+index 0000000..bbcb309
+--- /dev/null
++++ b/apps/game/src/components/game-board.tsx
+@@ -0,0 +1,29 @@
++import { GameResource } from "@/types/game";
++import clsx from "clsx";
++
++export interface GameBoard {
++  game: GameResource | undefined;
++}
++
++const COIN_SIZE = "size-20";
++
++export function GameBoard({ game }: GameBoard) {
++  console.log(game);
++  return (
++    <div data-comp="GameBoard" className="p-10">
++      {game?.board.map((row, i) => (
++        <div key={i} className="flex items-center gap-4 mb-4">
++          {row.map((col, j) => (
++            <div
++              key={j}
++              className={clsx(
++                COIN_SIZE,
++                "border-2 rounded-full border-slate-800",
++              )}
++            />
++          ))}
++        </div>
++      ))}
++    </div>
++  );
++}
+diff --git a/apps/game/src/service/game-engine.ts b/apps/game/src/service/game-engine.ts
+new file mode 100644
+index 0000000..e69de29

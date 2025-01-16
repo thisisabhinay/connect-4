@@ -1,10 +1,13 @@
 "use client";
 
+import { GameBoard } from "@/components/game-board";
+import { GameResource } from "@/types/game";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const API_URL = "/api/save-game";
 export default function Home() {
+  const [game, setGame] = useState<GameResource>();
   useEffect(() => {
     axios
       .post(API_URL, {
@@ -16,8 +19,15 @@ export default function Home() {
         ],
         lastPlayer: 1,
       })
-      .then(({ data }) => console.log(data.game));
+      .then(({ data }) => setGame(data.game));
   }, []);
 
-  return <main></main>;
+  return (
+    <main
+      data-comp="Home"
+      className="bg-slate-100 h-screen flex items-center justify-center"
+    >
+      <GameBoard game={game} />
+    </main>
+  );
 }
