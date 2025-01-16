@@ -1,4 +1,4 @@
-import { Game } from "@/types/game";
+import { Game, NormalKey } from "@/types/game";
 import { CoinElement } from "./coin";
 
 type FillColor = {
@@ -10,21 +10,30 @@ const fillColor: FillColor = {
   2: "bg-amber-500",
 };
 
-export function GameBoard({ board, lastPlayer }: Game) {
-  function getInteractionStatus() {}
-
+export function GameBoard({ board, rows, cols }: Game) {
   return (
     <div
       data-comp="GameBoard"
       className="p-10 bg-white rounded-xl shadow-sm border border-slate-200"
     >
-      {board.map((row, i) => (
-        <div key={i} className="flex items-center gap-4 mb-4">
-          {row.map((col, j) => (
-            <CoinElement key={j} filled={fillColor[board[i][j]]} />
-          ))}
-        </div>
-      ))}
+      {Array(rows)
+        .fill(0)
+        ?.map((row, i) => (
+          <div key={i} className="flex items-center gap-4 mb-4">
+            {Array(cols)
+              .fill(0)
+              ?.map((col, j) => {
+                return (
+                  <CoinElement
+                    key={j}
+                    x={i}
+                    y={j}
+                    filled={fillColor[board[`${i}_${j}` as NormalKey]]}
+                  />
+                );
+              })}
+          </div>
+        ))}
     </div>
   );
 }

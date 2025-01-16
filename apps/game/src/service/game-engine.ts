@@ -1,16 +1,20 @@
 import { Game } from "@/types/game";
 
+export type NormalKey = `${number}_${number}`;
+
+export interface NormalizedGameState {
+  [key: NormalKey]: number;
+}
+
 class GameEngine {
-  public board: number[][];
-  public normalGameState: NormalizedGameState;
+  public board: NormalizedGameState;
   public lastPlayer: number;
 
   private static _instance: GameEngine;
 
   constructor() {
-    this.board = [[]];
+    this.board = {};
     this.lastPlayer = 0;
-    this.normalGameState = {};
   }
 
   public static getInstance() {
@@ -19,9 +23,8 @@ class GameEngine {
 
   public updateGameState(game?: Game) {
     const { board, lastPlayer } = game as Game;
-    this.board = board ?? [[]];
+    this.board = board ?? {};
     this.lastPlayer = lastPlayer ?? 0;
-    this.normalGameState = this.normalizeData(this.board);
   }
 
   public normalizeData(board: number[][]): NormalizedGameState {

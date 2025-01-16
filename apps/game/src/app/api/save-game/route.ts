@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     const body: Game = await request.json();
 
     // Validate required fields
-    if (!body.board || !body.lastPlayer) {
+    if (!body.board || !body.lastPlayer || !body.rows || !body.cols) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 },

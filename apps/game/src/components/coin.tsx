@@ -4,14 +4,20 @@ import clsx from "clsx";
 export interface CoinElement {
   filled?: string;
   isInteractable?: boolean;
+  x: number;
+  y: number;
 }
 
 export function CoinElement({
   filled = "",
   isInteractable = true,
+  x,
+  y,
 }: CoinElement) {
   return (
     <div
+      data-x={x}
+      data-y={y}
       className={clsx(
         Coin.Size,
         filled,
