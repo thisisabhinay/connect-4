@@ -17,12 +17,6 @@ export default function Home() {
   });
 
   async function initGameState() {
-    const t = [
-      [0, 0],
-      [0, 1],
-      [1, 0],
-      [1, 1],
-    ];
     const { data } = await axios.post(API_URL, {
       board: {
         "0_0": 0,
