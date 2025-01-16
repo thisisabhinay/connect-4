@@ -1,18 +1,10 @@
 import type { Config } from "tailwindcss";
+import defaultConfig from "@repo/tailwind-config/default";
 
-export default {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
-    },
-  },
-  plugins: [],
-} satisfies Config;
+const config: Config = {
+  ...defaultConfig,
+  darkMode: ["class", "selector"],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+};
+
+export default config;
