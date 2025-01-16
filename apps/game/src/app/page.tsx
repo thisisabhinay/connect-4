@@ -1,19 +1,14 @@
 "use client";
 
 import { GameBoard } from "@/components/game-board";
-import { Game } from "@/types/game";
+import { GameResource } from "@/types/game";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 const API_URL = "/api/save-game";
 
 export default function Home() {
-  const [game, setGame] = useState<Game>({
-    board: {},
-    lastPlayer: 0,
-    rows: 0,
-    cols: 0,
-  });
+  const [game, setGame] = useState<GameResource>();
 
   async function initGameState() {
     const { data } = await axios.post(API_URL, {
@@ -36,10 +31,16 @@ export default function Home() {
         "3_3": 1,
       },
       lastPlayer: 1,
+      activePlayer: 2,
       cols: 4,
       rows: 4,
+      isGameOver: false,
+      winner: null,
+      winningCells: [],
     });
-    setGame(data.game);
+
+    console.log(data);
+    setGame(data);
   }
 
   useEffect(() => {
@@ -51,9 +52,11 @@ export default function Home() {
   return (
     <main
       data-comp="Home"
-      className="bg-slate-100 h-screen flex items-center justify-center"
+      className="bg-slate-100 gap-10 h-screen grid grid-cols-1 auto-rows-max items-center justify-center"
     >
-      <GameBoard {...game} />
+      <h1 className="text-5xl text-center font-bold">Connect4</h1>
+
+      {game?.id ? <GameBoard {...game} /> : null}
     </main>
   );
 }

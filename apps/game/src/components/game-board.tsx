@@ -8,19 +8,34 @@ export function GameBoard(initalGameState: Game) {
     activePlayer,
     isMoveLegal,
     makeMove,
+    isGameOver,
+    winner,
     getPlayerColor,
+    resetGame,
   } = useGameState(initalGameState);
 
   return (
     <div
       data-comp="GameBoard"
-      className="p-10 bg-white rounded-xl shadow-sm border border-slate-200"
+      className="mx-auto max-w-fit p-10 bg-white rounded-xl shadow-sm border border-slate-200"
     >
       <div className="grid grid-cols-1 auto-rows-max gap-10">
-        <div id="player-info">
-          <h2 className="text-2xl font-semibold uppercase">
-            Player {activePlayer} turn
-          </h2>
+        <div id="game-stats" className="mb-4">
+          {isGameOver ? (
+            <div className="text-xl">
+              {winner ? `Player ${winner} wins!` : "It's a draw!"}
+              <button
+                onClick={resetGame}
+                className="ml-4 px-4 py-2 bg-blue-500 text-white rounded"
+              >
+                Play Again
+              </button>
+            </div>
+          ) : (
+            <div className="text-2xl font-semibold uppercase">
+              Player {activePlayer} turn
+            </div>
+          )}
         </div>
         <div id="board-grid">
           {Array(initalGameState.rows)

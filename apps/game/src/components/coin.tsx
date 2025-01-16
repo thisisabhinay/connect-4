@@ -29,7 +29,7 @@ export function CoinElement({
         isAllowed
           ? "cursor-pointer transform hover:scale-110 hover:border-slate-800"
           : "cursor-not-allowed bg-slate-50 border-dotted",
-        "cursor-pointer border-2 rounded-full !border-slate-800/40",
+        "cursor-pointer border-8 rounded-full !border-slate-800/20",
         "transition-all duration-200 ease-out",
       )}
     />
