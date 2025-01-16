@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
+import { nanoid } from "nanoid";
 
 import { type Game, type GameResource } from "@/types/game";
 
@@ -33,12 +34,15 @@ export async function POST(request: NextRequest) {
     }
 
     const newResource: GameResource = {
-      id: crypto.randomUUID(),
+      id: nanoid(),
       lastUpdate: new Date().toISOString(),
       ...body,
     };
 
-    return NextResponse.json({ game: newResource }, { status: 201 });
+    const { data } = await axios.post(BASE_URL, newResource);
+    console.log(data);
+
+    return NextResponse.json(data, { status: 201 });
   } catch (error) {
     if (error instanceof Error && error.name === "SyntaxError") {
       return NextResponse.json(
