@@ -4,7 +4,6 @@ import { GameBoard } from "@/components/game-board";
 import { Game } from "@/types/game";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { gameEngine } from "@/service/game-engine";
 
 const API_URL = "/api/save-game";
 
@@ -46,11 +45,6 @@ export default function Home() {
   useEffect(() => {
     initGameState();
   }, []);
-
-  useEffect(() => {
-    gameEngine.updateGameState(game);
-    gameEngine.print();
-  }, [game]);
 
   // function isFillable() {}
 
