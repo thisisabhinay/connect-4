@@ -1,26 +1,27 @@
-import { GameResource } from "@/types/game";
-import clsx from "clsx";
+import { Game } from "@/types/game";
+import { CoinElement } from "./coin";
 
-export interface GameBoard {
-  game: GameResource | undefined;
-}
+type FillColor = {
+  [key: number]: string;
+};
 
-const COIN_SIZE = "size-20";
+const fillColor: FillColor = {
+  1: "bg-indigo-500",
+  2: "bg-amber-500",
+};
 
-export function GameBoard({ game }: GameBoard) {
-  console.log(game);
+export function GameBoard({ board, lastPlayer }: Game) {
+  function getInteractionStatus() {}
+
   return (
-    <div data-comp="GameBoard" className="p-10">
-      {game?.board.map((row, i) => (
+    <div
+      data-comp="GameBoard"
+      className="p-10 bg-white rounded-xl shadow-sm border border-slate-200"
+    >
+      {board.map((row, i) => (
         <div key={i} className="flex items-center gap-4 mb-4">
           {row.map((col, j) => (
-            <div
-              key={j}
-              className={clsx(
-                COIN_SIZE,
-                "border-2 rounded-full border-slate-800",
-              )}
-            />
+            <CoinElement key={j} filled={fillColor[board[i][j]]} />
           ))}
         </div>
       ))}
