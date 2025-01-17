@@ -1,8 +1,10 @@
-import { Game, NormalKey } from "@/types/game";
+"use client";
+
+import { GameResource, NormalKey } from "@/types/game";
 import { CoinElement } from "./coin";
 import { useGameState } from "@/hooks/use-game-state";
 
-export function GameBoard(initalGameState: Game) {
+export function GameBoard(initalGameState: GameResource) {
   const {
     board: gameBoard,
     activePlayer,
@@ -16,7 +18,6 @@ export function GameBoard(initalGameState: Game) {
   } = useGameState(initalGameState);
 
   const winningIndexes = winningCells.map((cell) => `${cell.row}_${cell.col}`);
-  console.log(winningIndexes);
 
   return (
     <div

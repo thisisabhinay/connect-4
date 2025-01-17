@@ -1,6 +1,7 @@
-import { Game, NormalKey } from "@/types/game";
+import { Game, GameResource, NormalKey } from "@/types/game";
 import { checkWin, generateEmptyBoard, isBoardFull } from "@/utils/game";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { updateGameSession } from "@/actions/update-game-session";
 
 export type FillColor = {
   [key: number]: string;
@@ -16,8 +17,8 @@ export const PLAYER_COLORS: FillColor = {
   2: "!bg-amber-500 !border-solid",
 };
 
-export function useGameState(initialGameState: Game) {
-  const [gameState, setGameState] = useState<Game>(initialGameState);
+export function useGameState(initialGameState: GameResource) {
+  const [gameState, setGameState] = useState<GameResource>(initialGameState);
 
   const getCellValue = useCallback(
     (row: number, col: number): number => {
@@ -66,6 +67,7 @@ export function useGameState(initialGameState: Game) {
 
         return {
           ...prev,
+          lastUpdate: new Date().toISOString(),
           board: newBoard,
           lastPlayer: prev.activePlayer,
           activePlayer: isGameOver
@@ -91,6 +93,10 @@ export function useGameState(initialGameState: Game) {
       winningCells: [],
     }));
   }, []);
+
+  useEffect(() => {
+    updateGameSession(gameState);
+  }, [gameState]);
 
   return {
     ...gameState,

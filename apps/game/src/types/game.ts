@@ -24,6 +24,10 @@ export interface Game {
   isGameOver: boolean;
   winner: number;
   winningCells: Position[];
+  playerNames: {
+    1: string;
+    2: string;
+  };
 }
 
 export interface GameResource extends Game {
