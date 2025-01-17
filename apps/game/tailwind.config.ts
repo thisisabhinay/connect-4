@@ -16,7 +16,7 @@ const config: Config = {
       keyframes: {
         "move-bg": {
           "0%": { "background-position": "100% 0" },
-          "100%": { "background-position": "0% 0" },
+          "100%": { "background-position": "-10% 0" },
         },
       },
     },

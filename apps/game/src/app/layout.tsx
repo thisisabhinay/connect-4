@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Press_Start_2P } from "next/font/google";
+import "@/vendor/css/nes.css";
 import "./globals.css";
+import { BackgroundMusic } from "@/components/background-music";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const pressStart2P = Press_Start_2P({
+  weight: "400",
+  variable: "--font-press-start-2p",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  style: "normal",
 });
 
 export const metadata: Metadata = {
@@ -25,9 +24,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-sky bg-cover animate-bg`}
+        className={`${pressStart2P.variable} antialiased bg-sky !bg-cover animate-bg font-[var(--font-press-start-2p)]`}
       >
-        <div className="flex flex-row-reverse items-center">Sound</div>
+        <div className="flex flex-row-reverse items-center gap-6 px-6 md:absolute w-full justify-center md:justify-start">
+          <a
+            href="https://github.com/thisisabhinay/connect-4"
+            target="_blank"
+            className="nes-icon github is-large"
+          />
+          <BackgroundMusic />
+        </div>
         {children}
       </body>
     </html>

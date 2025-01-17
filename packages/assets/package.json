@@ -11,6 +11,10 @@
     "./image": {
       "types": "./images/index.ts",
       "default": "./images/index.ts"
+    },
+    "./sound": {
+      "types": "./sounds/index.ts",
+      "default": "./sounds/index.ts"
     }
   },
   "devDependencies": {
