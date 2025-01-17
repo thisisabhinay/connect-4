@@ -1,84 +1,248 @@
-# Turborepo starter
+# Connect 4 Game
 
-This is an official starter Turborepo.
+A modern implementation of the classic Connect 4 game built with Next.js and JSON Server.
 
-## Using this example
+## Project Structure
 
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+The project follows a monorepo architecture with two main applications, separating the concerns between frontend and backend:
 
 ```
-cd my-turborepo
-pnpm build
+connect-4/
+├── apps/
+│   ├── game/        # Frontend Next.js application
+│   └── server/      # Backend JSON Server application
 ```
 
-### Develop
+## Features
 
-To develop all apps and packages, run the following command:
+### Core Game Features
+
+- Customizable board dimensions allowing players to set their preferred number of rows and columns
+- Game state management ensuring consistent game state across players
+- Turn tracking system that alternates between players
+- Win detection algorithm that checks for winning combinations in four directions:
+  - Horizontal: Checks for four consecutive pieces in a row
+  - Vertical: Checks for four consecutive pieces in a column
+  - Diagonal: Checks for four consecutive pieces in diagonal direction (↘)
+  - Anti-diagonal: Checks for four consecutive pieces in opposite diagonal direction (↗)
+- Game state persistence using JSON Server backend
+- Automatic draw detection when the board becomes full
+
+### User Interface Features
+
+- Responsive design that adapts to different screen sizes using Tailwind CSS
+- Modern, clean UI implementation
+- Visual feedback system including:
+  - Highlighting of legal moves
+  - Special styling for winning combinations
+  - Clear indication of current player's turn
+  - Distinctive colors for each player (Indigo for Player 1, Amber for Player 2)
+- Customizable player names
+- One-click "Play Again" functionality for quick game restart
+
+## Game Rules and Mechanics
+
+### Basic Rules
+
+1. The game is played on a vertical grid where players drop colored coins from the top.
+2. Players alternate turns, with Player 1 starting first (Indigo coins).
+3. On their turn, a player can click the slot to fill their coin into any column that isn't full.
+4. Slots on the lowest available position are activated in the chosen column due to simulated gravity.
+
+### Winning Conditions
+
+The game can end in one of three ways:
+
+1. Victory: A player wins by connecting four of their coins in any of these patterns:
+
+   - Horizontally: Four coins in a row (→)
+   - Vertically: Four coins in a column (↓)
+   - Diagonally: Four coins in either diagonal direction (↘ or ↗)
+
+2. Draw: If the entire board fills up without either player achieving a winning connection, the game ends in a draw.
+
+3. The winning combination is highlighted on the board when a player wins.
+
+### Move Validation
+
+The game implements several move validation rules:
+
+1. Players can only place coins in columns that aren't full
+2. Coins must "fall" to the lowest available position in a column
+3. Players cannot place coins in invalid positions or during the opponent's turn
+4. Game prevents moves after a winner is determined
+
+## Technology Stack
+
+### Frontend (apps/game)
+
+- Next.js 15.1.4 for server-side rendering and routing
+- React 19 with hooks for state management
+- TypeScript for type safety and better development experience
+- Tailwind CSS for responsive styling
+- Axios for reliable API communication
+- clsx for conditional class name management
+- nanoid for generating unique game identifiers
+
+### Backend (apps/server)
+
+- JSON Server providing a full fake REST API
+- Node.js runtime environment
+- CORS support for cross-origin requests
+- Vercel deployment configuration for seamless hosting
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20.11.1 or higher (supports modern JavaScript features)
+- Pnpm 9.14.2 or higher (for package management)
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone [repository-url]
+cd connect-4
+```
+
+2. Install dependencies using Yarn:
+
+```bash
+pnpm install
+```
+
+3. Configure environment variables:
+   Create `.env.local` in the game directory with the following content:
 
 ```
-cd my-turborepo
+NEXT_PUBLIC_GAME_URL=http://localhost:9000/game
+```
+
+### Running the Application
+
+1. Start the backend server:
+
+```bash
+cd apps/server
 pnpm dev
 ```
 
-### Remote Caching
+This will start the JSON Server on port 9000.
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+2. In a new terminal, start the frontend application:
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+```bash
+cd apps/game
+pnpm dev
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+This will start the Next.js development server on port 3000.
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+3. Open http://localhost:3000 in your browser to start playing
 
-```
-npx turbo link
-```
+## Code Architecture
 
-## Useful Links
+### Frontend Structure
 
-Learn more about the power of Turborepo:
+The frontend code is organized following a feature-based architecture:
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+- `src/components/`: React components including:
+  - GameBoard: Main game grid and game state display
+  - Coin: Individual cell component with move handling
+- `src/hooks/`: Custom React hooks including:
+  - useGameState: Central game logic and state management
+- `src/types/`: TypeScript type definitions for game entities
+- `src/utils/`: Utility functions for game logic including win detection
+- `src/actions/`: Server actions for game state persistence
+- `src/app/`: Next.js pages and layouts
+
+### Key Components
+
+#### GameBoard Component
+
+The GameBoard component serves as the main game interface:
+
+- Manages the game grid and player interactions
+- Implements turn-based gameplay logic
+- Displays game status including current player and winner
+- Handles the reset functionality for new games
+
+#### CoinElement Component
+
+The CoinElement component represents individual cells in the game grid:
+
+- Manages click events for piece placement
+- Provides visual feedback for:
+  - Legal moves through hover states
+  - Current piece placement
+  - Winning combinations
+- Implements accessibility features for better user interaction
+
+#### useGameState Hook
+
+This custom hook centralizes game logic:
+
+- Manages the complete game state
+- Implements move validation rules
+- Handles win detection across all directions
+- Manages player turns and game reset functionality
+- Coordinates with the backend for state persistence
+
+## API Endpoints
+
+The JSON Server provides a RESTful API with these endpoints:
+
+- `GET /game/:id`: Retrieve a specific game session
+  - Returns the complete game state including board configuration and player information
+- `POST /game`: Create a new game session
+  - Accepts initial game configuration including board size and player names
+- `PATCH /game/:id`: Update an existing game session
+  - Handles move submissions and game state updates
+
+## Development Guidelines
+
+### Code Style
+
+The project maintains consistent code quality through:
+
+- ESLint configuration for code linting
+- Tailwind CSS for maintainable styling
+- TypeScript for type safety
+- Consistent file and component naming conventions
+
+### State Management
+
+The game uses React's built-in state management with hooks, specifically:
+
+- useState for local component state
+- useEffect for side effects like API calls
+- Custom hooks for encapsulating complex game logic
+
+## Deployment
+
+The project is configured for deployment on Vercel:
+
+### Backend (JSON Server)
+
+- Uses custom Vercel configuration in `vercel.json`
+- Handles API routes and CORS
+- Requires proper environment variable configuration
+
+### Frontend (Next.js)
+
+- Follows standard Next.js deployment process
+- Requires environment variables in Vercel dashboard
+- Optimized for production builds
+
+## Acknowledgments
+
+- Built with Next.js and JSON Server
+- Styled with Tailwind CSS
+- Icons by Lucide React
+
+---
+
+_*Document Information:*_
+_This system design document was co-generated with Claude, an AI by Anthropic._
