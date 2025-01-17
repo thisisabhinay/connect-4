@@ -1,5 +1,7 @@
 "use client";
 import { createGameSession } from "@/actions/create-game-session";
+import Image from "next/image";
+import { Logo } from "@repo/assets/image";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -15,11 +17,18 @@ export default function Home() {
   return (
     <main
       data-comp="Home"
-      className="bg-slate-100 gap-10 h-screen grid grid-cols-1 auto-rows-max items-center justify-center"
+      className="h-screen grid grid-cols-1 auto-rows-max items-center justify-center"
     >
-      <h1 className="text-5xl text-center font-bold">Connect4</h1>
+      <div className="flex items-center justify-center py-10">
+        <Image
+          src={Logo.src}
+          width={Logo.width / 1.5}
+          height={Logo.height / 1.5}
+          alt="Connect4 logo"
+        />
+      </div>
 
-      <div className="min-h-screen bg-gray-100 p-8">
+      <div className="p-8">
         <div className="max-w-md mx-auto bg-white rounded p-6">
           <h1 className="text-2xl font-bold text-center mb-6">
             Start New Game

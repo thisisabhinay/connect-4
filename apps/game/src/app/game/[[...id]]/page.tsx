@@ -41,7 +41,7 @@ export default function Home() {
   }, [id]);
 
   return (
-    <main className="bg-slate-100 gap-10 h-screen grid grid-cols-1 auto-rows-max items-center justify-center">
+    <main className="gap-10 h-screen grid grid-cols-1 auto-rows-max items-center justify-center">
       <h1 className="text-5xl text-center font-bold">Connect4</h1>
 
       {isLoading ? (
