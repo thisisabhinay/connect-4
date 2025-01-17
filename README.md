@@ -245,4 +245,4 @@ The project is configured for deployment on Vercel:
 ---
 
 _*Document Information:*_
-_This system design document was co-generated with Claude, an AI by Anthropic._
+_This README document is co-generated with Claude, an AI by Anthropic._
