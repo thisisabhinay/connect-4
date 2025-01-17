@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${pressStart2P.variable} antialiased bg-sky !bg-cover animate-bg font-[var(--font-press-start-2p)]`}
+        className={`${pressStart2P.variable} antialiased bg-black bg-sky animate-bg bg-cover bg-right h-full`}
       >
         <div className="flex flex-row-reverse items-center gap-6 px-6 md:absolute w-full justify-center md:justify-start">
           <a

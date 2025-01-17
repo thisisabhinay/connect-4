@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import { GameBoard } from "@/components/game-board";
-import axios from "axios";
 import { GameResource } from "@/types/game";
+import { Logo } from "@repo/assets/image";
+import axios from "axios";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const BASE_URL = process.env.NEXT_PUBLIC_GAME_URL ?? "";
 
-export default function Home() {
+export default function GamePage() {
   const { id } = useParams();
   const [game, setGame] = useState<GameResource>();
   const [isLoading, setIsLoading] = useState(true);
@@ -40,8 +42,25 @@ export default function Home() {
     fetchGame();
   }, [id]);
 
+  useEffect(() => {
+    document.body.classList.remove("animate-bg");
+    document.body.classList.add("bg-landscape");
+    document.body.classList.add("bg-right");
+  }, []);
+
   return (
-    <main className="gap-10 h-screen grid grid-cols-1 auto-rows-max items-center justify-center">
+    <main
+      data-comp="GamePage"
+      className="grid grid-cols-1 auto-rows-max items-center justify-center"
+    >
+      <div className="flex items-center justify-center py-10">
+        <Image
+          src={Logo.src}
+          width={Math.round(Logo.width / 1.5)}
+          height={Math.round(Logo.height / 1.5)}
+          alt="Connect4 Logo"
+        />
+      </div>
       <h1 className="text-5xl text-center font-bold">Connect4</h1>
 
       {isLoading ? (
