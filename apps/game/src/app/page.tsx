@@ -100,7 +100,7 @@ export default function Home() {
               className="nes-icon twitter is-large"
             ></a>
             <a
-              href="#"
+              href="https://www.linkedin.com/in/thisisabhinay"
               target="_blank"
               className="nes-icon linkedin is-large"
             ></a>
