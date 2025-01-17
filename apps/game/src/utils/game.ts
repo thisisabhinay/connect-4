@@ -1,10 +1,12 @@
 import {
   Game,
   NormalizedGameState,
+  NormalKey,
   Position,
   WinningDirection,
 } from "@/types/game";
 
+const EMPTY_CELL_VALUE = 0;
 const WINNING_LENGTH = 4;
 const DIRECTIONS = {
   horizontal: { row: 0, col: 1 },
@@ -19,17 +21,23 @@ export function checkWinInDirection(
   startCol: number,
   player: number,
   direction: WinningDirection,
+  rows: number,
+  cols: number,
 ): Position[] {
   const winningCells: Position[] = [];
   const dir = DIRECTIONS[direction];
 
-  // Check WINNING_LENGTH positions in the given direction
   for (let i = 0; i < WINNING_LENGTH; i++) {
     const row = startRow + dir.row * i;
     const col = startCol + dir.col * i;
-    const cell = board[`${row}_${col}`];
+    const key = `${row}_${col}` as NormalKey;
+    const cell = board[key] ?? 0;
 
-    // If we find a cell that's not the player's, this isn't a winning line
+    // Add bounds checking to prevent out-of-bounds access
+    if (row < 0 || row >= rows || col < 0 || col >= cols) {
+      return [];
+    }
+
     if (cell !== player) {
       return [];
     }
@@ -45,6 +53,8 @@ export function checkWin(
   lastRow: number,
   lastCol: number,
   player: number,
+  rows: number,
+  cols: number,
 ): Position[] {
   // Check all possible winning directions from the last move
   for (const direction of Object.keys(DIRECTIONS) as WinningDirection[]) {
@@ -58,9 +68,9 @@ export function checkWin(
       // Skip if starting position would lead to out-of-bounds checks
       if (
         startRow < 0 ||
-        startRow + dir.row * (WINNING_LENGTH - 1) >= lastRow ||
+        startRow + dir.row * (WINNING_LENGTH - 1) >= rows ||
         startCol < 0 ||
-        startCol + dir.col * (WINNING_LENGTH - 1) >= lastCol
+        startCol + dir.col * (WINNING_LENGTH - 1) >= cols
       ) {
         continue;
       }
@@ -71,8 +81,10 @@ export function checkWin(
         startCol,
         player,
         direction,
+        rows,
+        cols,
       );
-      if (winningCells) {
+      if (winningCells?.length) {
         return winningCells;
       }
     }
@@ -81,11 +93,25 @@ export function checkWin(
   return [];
 }
 
-export function isBoardFull({ board, cols }: Game) {
-  for (let col = 0; col < cols; col++) {
-    if (board[`0_${col}`] === 0) {
-      return false;
+export function isBoardFull({ board }: Game) {
+  if (!board || typeof board !== "object") {
+    return false;
+  }
+
+  return !Object.values(board).includes(EMPTY_CELL_VALUE);
+}
+
+export function generateEmptyBoard(
+  rows: number,
+  cols: number,
+): NormalizedGameState {
+  const emptyBoard: NormalizedGameState = {};
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      const key = `${i}_${j}` as NormalKey;
+      emptyBoard[key] = 0;
     }
   }
-  return true;
+
+  return emptyBoard;
 }

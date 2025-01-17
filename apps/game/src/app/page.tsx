@@ -2,38 +2,24 @@
 
 import { GameBoard } from "@/components/game-board";
 import { GameResource } from "@/types/game";
+import { generateEmptyBoard } from "@/utils/game";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 const API_URL = "/api/save-game";
+const ROWS = 6;
+const COLS = 5;
 
 export default function Home() {
   const [game, setGame] = useState<GameResource>();
 
   async function initGameState() {
     const { data } = await axios.post(API_URL, {
-      board: {
-        "0_0": 0,
-        "0_1": 0,
-        "0_2": 0,
-        "0_3": 0,
-        "1_0": 0,
-        "1_1": 0,
-        "1_2": 0,
-        "1_3": 2,
-        "2_0": 0,
-        "2_1": 0,
-        "2_2": 1,
-        "2_3": 1,
-        "3_0": 1,
-        "3_1": 2,
-        "3_2": 2,
-        "3_3": 1,
-      },
-      lastPlayer: 1,
-      activePlayer: 2,
-      cols: 4,
-      rows: 4,
+      board: generateEmptyBoard(ROWS, COLS),
+      lastPlayer: 2,
+      activePlayer: 1,
+      rows: ROWS,
+      cols: COLS,
       isGameOver: false,
       winner: null,
       winningCells: [],

@@ -1,5 +1,5 @@
-import { Game } from "@/types/game";
-import { checkWin, isBoardFull } from "@/utils/game";
+import { Game, NormalKey } from "@/types/game";
+import { checkWin, generateEmptyBoard, isBoardFull } from "@/utils/game";
 import { useState, useCallback } from "react";
 
 export type FillColor = {
@@ -19,20 +19,26 @@ export const PLAYER_COLORS: FillColor = {
 export function useGameState(initialGameState: Game) {
   const [gameState, setGameState] = useState<Game>(initialGameState);
 
+  const getCellValue = useCallback(
+    (row: number, col: number): number => {
+      const key = `${row}_${col}`;
+      // Use nullish coalescing to default to 0 if the cell doesn't exist
+      return gameState.board[key as NormalKey] ?? 0;
+    },
+    [gameState.board],
+  );
+
   const isMoveLegal = useCallback(
     (row: number, col: number) => {
       // For bottom row, just check if the space is empty
-      if (row === gameState.rows) {
-        return gameState.board[`${row}_${col}`] === 0;
+      if (row === gameState.rows - 1) {
+        return getCellValue(row, col) === 0;
       }
 
       // For other rows, check if space is empty and space below is occupied
-      return (
-        gameState.board[`${row}_${col}`] === 0 &&
-        gameState.board[`${row + 1}_${col}`] > 0
-      );
+      return getCellValue(row, col) === 0 && getCellValue(row + 1, col) > 0;
     },
-    [gameState.board, gameState.rows],
+    [gameState.rows, getCellValue],
   );
 
   const makeMove = useCallback(
@@ -45,9 +51,17 @@ export function useGameState(initialGameState: Game) {
           [`${row}_${col}`]: prev.activePlayer,
         };
 
-        const winningCells = checkWin(newBoard, row, col, prev.activePlayer);
+        const winningCells = checkWin(
+          newBoard,
+          row,
+          col,
+          prev.activePlayer,
+          initialGameState.rows,
+          initialGameState.cols,
+        );
+
         const isGameOver =
-          Boolean(winningCells) ||
+          Boolean(winningCells.length) ||
           isBoardFull({ board: newBoard, cols: prev.cols } as Game);
 
         return {
@@ -63,13 +77,13 @@ export function useGameState(initialGameState: Game) {
         };
       });
     },
-    [isMoveLegal, gameState.cols],
+    [gameState.cols, isMoveLegal, initialGameState.rows, initialGameState.cols],
   );
 
   const resetGame = useCallback(() => {
     setGameState((prev) => ({
       ...prev,
-      board: {},
+      board: generateEmptyBoard(prev.rows, prev.cols),
       lastPlayer: 2,
       activePlayer: 1,
       isGameOver: false,

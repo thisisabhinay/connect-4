@@ -12,7 +12,11 @@ export function GameBoard(initalGameState: Game) {
     winner,
     getPlayerColor,
     resetGame,
+    winningCells,
   } = useGameState(initalGameState);
+
+  const winningIndexes = winningCells.map((cell) => `${cell.row}_${cell.col}`);
+  console.log(winningIndexes);
 
   return (
     <div
@@ -48,9 +52,12 @@ export function GameBoard(initalGameState: Game) {
                     return (
                       <CoinElement
                         key={j}
-                        x={i}
-                        y={j}
+                        i={i}
+                        j={j}
+                        value={gameBoard[`${i}_${j}` as NormalKey]}
+                        isGameOver={isGameOver}
                         isAllowed={isMoveLegal(i, j)}
+                        isWinningCell={winningIndexes.includes(`${i}_${j}`)}
                         filled={getPlayerColor(
                           gameBoard[`${i}_${j}` as NormalKey],
                         )}
