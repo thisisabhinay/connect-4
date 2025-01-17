@@ -1,0 +1,22 @@
+{
+  "name": "@repo/assets",
+  "version": "0.0.1",
+  "private": true,
+  "types": "./index.d.ts",
+  "exports": {
+    "./icon": {
+      "types": "./icons/index.ts",
+      "default": "./icons/index.ts"
+    },
+    "./image": {
+      "types": "./images/index.ts",
+      "default": "./images/index.ts"
+    }
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0"
+  }
+}
