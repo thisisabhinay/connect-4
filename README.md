@@ -1,246 +1,282 @@
 # Connect 4 Game
 
-A modern implementation of the classic Connect 4 game built with Next.js and JSON Server.
+A modern take on the classic Connect 4 game built with Next.js, featuring local two-player gameplay, game state persistence, and a charming retro-styled user interface inspired by the NES era. Players take turns dropping colored discs on the same device, with the goal of connecting four of their pieces in a row, either horizontally, vertically, or diagonally. The game state is saved after each move, allowing players to resume their match later.
+
+## Features
+
+- **Retro-Styled UI**: Implements NES.css for a nostalgic, 8-bit visual aesthetic
+- **Customizable Game Board**: Players can set custom board dimensions (minimum 4x4)
+- **Real-time Game State**: Maintains game state across sessions using a JSON server
+- **Sound Effects**: Includes retro-style sound effects and background music
+- **Responsive Design**: Works seamlessly across desktop and mobile devices
+- **Game Session Management**: Supports saving and resuming games
+- **Win Detection**: Implements sophisticated win detection for horizontal, vertical, and diagonal matches
+- **Player Turns**: Visual indicators for active player turns
+- **Game Over States**: Handles wins, draws, and displays victory animations
 
 ## Project Structure
 
-The project follows a monorepo architecture with two main applications, separating the concerns between frontend and backend:
+The project follows a monorepo structure using a custom setup:
 
 ```
 connect-4/
 ├── apps/
-│   ├── game/        # Frontend Next.js application
-│   └── server/      # Backend JSON Server application
+│   ├── game/           # Frontend Next.js application
+│   │   ├── src/        # Source code
+│   │   ├── public/     # Static assets
+│   └── server/         # Backend JSON server
+└── packages/           # Shared packages
 ```
 
-## Features
+### Key Directories
 
-### Core Game Features
-
-- Customizable board dimensions allowing players to set their preferred number of rows and columns
-- Game state management ensuring consistent game state across players
-- Turn tracking system that alternates between players
-- Win detection algorithm that checks for winning combinations in four directions:
-  - Horizontal: Checks for four consecutive pieces in a row
-  - Vertical: Checks for four consecutive pieces in a column
-  - Diagonal: Checks for four consecutive pieces in diagonal direction (↘)
-  - Anti-diagonal: Checks for four consecutive pieces in opposite diagonal direction (↗)
-- Game state persistence using JSON Server backend
-- Automatic draw detection when the board becomes full
-
-### User Interface Features
-
-- Responsive design that adapts to different screen sizes using Tailwind CSS
-- Modern, clean UI implementation
-- Visual feedback system including:
-  - Highlighting of legal moves
-  - Special styling for winning combinations
-  - Clear indication of current player's turn
-  - Distinctive colors for each player (Indigo for Player 1, Amber for Player 2)
-- Customizable player names
-- One-click "Play Again" functionality for quick game restart
-
-## Game Rules and Mechanics
-
-### Basic Rules
-
-1. The game is played on a vertical grid where players drop colored coins from the top.
-2. Players alternate turns, with Player 1 starting first (Indigo coins).
-3. On their turn, a player can click the slot to fill their coin into any column that isn't full.
-4. Slots on the lowest available position are activated in the chosen column due to simulated gravity.
-
-### Winning Conditions
-
-The game can end in one of three ways:
-
-1. Victory: A player wins by connecting four of their coins in any of these patterns:
-
-   - Horizontally: Four coins in a row (→)
-   - Vertically: Four coins in a column (↓)
-   - Diagonally: Four coins in either diagonal direction (↘ or ↗)
-
-2. Draw: If the entire board fills up without either player achieving a winning connection, the game ends in a draw.
-
-3. The winning combination is highlighted on the board when a player wins.
-
-### Move Validation
-
-The game implements several move validation rules:
-
-1. Players can only place coins in columns that aren't full
-2. Coins must "fall" to the lowest available position in a column
-3. Players cannot place coins in invalid positions or during the opponent's turn
-4. Game prevents moves after a winner is determined
+- `apps/game/src/components/`: React components for the game UI
+- `apps/game/src/hooks/`: Custom React hooks for game logic
+- `apps/game/src/actions/`: Server actions for game state management
+- `apps/game/src/utils/`: Utility functions and helpers
+- `apps/server/`: JSON server implementation for game state persistence
 
 ## Technology Stack
 
-### Frontend (apps/game)
+- **Frontend**:
 
-- Next.js 15.1.4 for server-side rendering and routing
-- React 19 with hooks for state management
-- TypeScript for type safety and better development experience
-- Tailwind CSS for responsive styling
-- Axios for reliable API communication
-- clsx for conditional class name management
-- nanoid for generating unique game identifiers
+  - Next.js 14 (React Framework)
+  - TypeScript
+  - Tailwind CSS
+  - NES.css (Retro styling)
+  - React Confetti (Victory animations)
 
-### Backend (apps/server)
+- **Backend**:
 
-- JSON Server providing a full fake REST API
-- Node.js runtime environment
-- CORS support for cross-origin requests
-- Vercel deployment configuration for seamless hosting
+  - JSON Server (REST API)
+  - Node.js
 
-## Getting Started
+- **State Management**:
+  - React Hooks
+  - Server Actions
+  - Local Storage for game persistence
 
-### Prerequisites
-
-- Node.js 20.11.1 or higher (supports modern JavaScript features)
-- Pnpm 9.14.2 or higher (for package management)
-
-### Installation
+## Setup Instructions
 
 1. Clone the repository:
 
 ```bash
-git clone [repository-url]
+git clone https://github.com/thisisabhinay/connect-4.git
 cd connect-4
 ```
 
-2. Install dependencies using Yarn:
+2. Install dependencies:
 
 ```bash
-pnpm install
+yarn install
 ```
 
-3. Configure environment variables:
-   Create `.env.local` in the game directory with the following content:
+3. Set up environment variables:
+   Create a `.env.local` file in the `apps/game` directory:
 
 ```
 NEXT_PUBLIC_GAME_URL=http://localhost:9000/game
 ```
 
-### Running the Application
+4. Start the development servers:
 
-1. Start the backend server:
+For the backend:
 
 ```bash
 cd apps/server
-pnpm dev
+yarn dev
 ```
 
-This will start the JSON Server on port 9000.
-
-2. In a new terminal, start the frontend application:
+For the frontend:
 
 ```bash
 cd apps/game
-pnpm dev
+yarn dev
 ```
 
-This will start the Next.js development server on port 3000.
+5. Open `http://localhost:3000` in your browser
 
-3. Open http://localhost:3000 in your browser to start playing
+## Game Architecture
 
-## Code Architecture
+### Frontend Architecture
 
-### Frontend Structure
+The frontend follows the RADIO framework principles:
 
-The frontend code is organized following a feature-based architecture:
-
-- `src/components/`: React components including:
-  - GameBoard: Main game grid and game state display
-  - Coin: Individual cell component with move handling
-- `src/hooks/`: Custom React hooks including:
-  - useGameState: Central game logic and state management
-- `src/types/`: TypeScript type definitions for game entities
-- `src/utils/`: Utility functions for game logic including win detection
-- `src/actions/`: Server actions for game state persistence
-- `src/app/`: Next.js pages and layouts
-
-### Key Components
-
-#### GameBoard Component
-
-The GameBoard component serves as the main game interface:
-
-- Manages the game grid and player interactions
-- Implements turn-based gameplay logic
-- Displays game status including current player and winner
-- Handles the reset functionality for new games
-
-#### CoinSlot Component
-
-The CoinSlot component represents individual cells in the game grid:
-
-- Manages click events for piece placement
-- Provides visual feedback for:
-  - Legal moves through hover states
-  - Current piece placement
-  - Winning combinations
-- Implements accessibility features for better user interaction
-
-#### useGameState Hook
-
-This custom hook centralizes game logic:
-
-- Manages the complete game state
-- Implements move validation rules
-- Handles win detection across all directions
-- Manages player turns and game reset functionality
-- Coordinates with the backend for state persistence
-
-## API Endpoints
-
-The JSON Server provides a RESTful API with these endpoints:
-
-- `GET /game/:id`: Retrieve a specific game session
-  - Returns the complete game state including board configuration and player information
-- `POST /game`: Create a new game session
-  - Accepts initial game configuration including board size and player names
-- `PATCH /game/:id`: Update an existing game session
-  - Handles move submissions and game state updates
-
-## Development Guidelines
-
-### Code Style
-
-The project maintains consistent code quality through:
-
-- ESLint configuration for code linting
-- Tailwind CSS for maintainable styling
-- TypeScript for type safety
-- Consistent file and component naming conventions
+1. **Requirements**: Handles game setup, player interactions, and win conditions
+2. **Architecture**: Component-based structure with clear separation of concerns
+3. **Data Model**: Uses TypeScript interfaces for game state and player information
+4. **Interface**: Clean API between components and server
+5. **Optimizations**: Implements performance optimizations and smooth animations
 
 ### State Management
 
-The game uses React's built-in state management with hooks, specifically:
+The game implements a sophisticated state management system centered around the `useGameState` custom hook. This hook serves as the central nervous system of the game, managing both the game's logic and state updates.
 
-- useState for local component state
-- useEffect for side effects like API calls
-- Custom hooks for encapsulating complex game logic
+The state management system is built on several key principles:
 
-## Deployment
+1. **Immutable State Updates**: The game state is updated using immutable patterns, ensuring that each state change creates a new state object rather than modifying the existing one. This approach helps prevent bugs and makes state changes more predictable. For example, when a player makes a move, the entire board state is copied and then updated:
 
-The project is configured for deployment on Vercel:
+```typescript
+setGameState((prev) => ({
+  ...prev,
+  board: {
+    ...prev.board,
+    [`${row}_${col}`]: prev.activePlayer,
+  },
+}));
+```
 
-### Backend (JSON Server)
+2. **Normalized State Structure**: The game board is stored in a normalized format using a key-value structure where each key represents a cell position (e.g., "0_0", "0_1"). This makes it efficient to:
 
-- Uses custom Vercel configuration in `vercel.json`
-- Handles API routes and CORS
-- Requires proper environment variable configuration
+   - Update individual cell states
+   - Check for win conditions
+   - Serialize the state for storage
+   - Restore game state from storage
 
-### Frontend (Next.js)
+3. **State Persistence**: The game state is automatically persisted to both:
 
-- Follows standard Next.js deployment process
-- Requires environment variables in Vercel dashboard
-- Optimized for production builds
+   - Local storage (for quick game resumption)
+   - Backend server (for game sharing and longer-term persistence)
+
+4. **Reactive Updates**: The state management system uses React's built-in state management capabilities along with effects to ensure that:
+   - UI updates are performed efficiently
+   - Game rules are enforced consistently
+   - Win conditions are checked after each move
+   - Player turns are managed automatically
+
+Here's how different aspects of the state are managed:
+
+```typescript
+interface GameState {
+  board: NormalizedGameState; // Current board state
+  activePlayer: number; // Current player's turn
+  lastPlayer: number; // Previous player
+  isGameOver: boolean; // Game end state
+  winner: number; // Winning player (if any)
+  winningCells: Position[]; // Winning combination
+  playerNames: PlayerName; // Player information
+}
+```
+
+### Backend Architecture
+
+The backend architecture is built using JSON Server, which provides a full fake REST API with zero coding required. This architecture was chosen for its simplicity and rapid development capabilities while still providing robust functionality for the game's needs.
+
+The backend architecture is structured around several key components:
+
+1. **RESTful API Endpoints**:
+
+   - `GET /game/:id` - Retrieves a specific game session
+   - `POST /game` - Creates a new game session
+   - `PATCH /game/:id` - Updates an existing game session
+
+   Each endpoint automatically handles data persistence and JSON transformation.
+
+2. **Data Model**: The backend maintains a structured data model that includes:
+
+```json
+{
+  "game": [
+    {
+      "id": "unique_id",
+      "lastUpdate": "timestamp",
+      "board": {
+        "0_0": 0,
+        "0_1": 0
+        // ... rest of the board state
+      },
+      "activePlayer": 1,
+      "lastPlayer": 2,
+      "isGameOver": false,
+      "winner": 0,
+      "winningCells": [],
+      "playerNames": {
+        "1": "Player1",
+        "2": "Player2"
+      }
+    }
+  ]
+}
+```
+
+3. **Middleware Configuration**:
+
+   - CORS support for cross-origin requests
+   - Body parsing for JSON payloads
+   - Request logging for debugging
+   - Error handling middleware
+
+4. **Data Persistence**:
+
+   - Uses a file-based storage system (`db.json`)
+   - Automatic data synchronization
+   - Transaction-like behavior for data consistency
+   - Automatic ID generation for new games
+
+5. **Server Configuration**:
+
+```javascript
+const server = jsonServer.create();
+const router = jsonServer.router("db.json");
+const middlewares = jsonServer.defaults();
+
+server.use(cors());
+server.use(jsonServer.bodyParser);
+server.use(middlewares);
+server.use(router);
+```
+
+The backend is designed to be:
+
+- Stateless: Each request contains all the information needed to process it
+- Scalable: Can handle multiple concurrent games
+- Resilient: Automatic error handling and recovery
+- Maintainable: Simple codebase with clear separation of concerns
+
+## Key Components
+
+- `GameBoard`: Main game board component
+- `CoinSlot`: Individual game cell component
+- `PlayerCharacter`: Player avatar and status display
+- `ModalGameOver`: Game end state display
+- `BackgroundMusic`: Audio management component
+
+## Game Features Explained
+
+### Win Detection
+
+The game implements win detection in four directions:
+
+- Horizontal
+- Vertical
+- Diagonal
+- Anti-diagonal
+
+The win detection algorithm efficiently checks for four consecutive matching pieces after each move.
+
+### Move Validation
+
+Moves are validated based on:
+
+- Column fullness
+- Game state (not ended)
+- Turn order
+- Gravity simulation (pieces fall to bottom)
+
+### Sound System
+
+The game features multiple sound effects:
+
+- Move sounds for each player
+- Victory jingle
+- Draw game sound
+- Background music (toggleable)
 
 ## Acknowledgments
 
-- Built with Next.js and JSON Server
-- Styled with Tailwind CSS
-- Icons by Lucide React
+- NES.css for the retro styling
+- React team for the amazing framework
+- JSON Server team for the backend solution
 
 ---
 
