@@ -33,8 +33,8 @@ interface ModalGameOver extends HTMLProps<HTMLDialogElement> {
  * Player 1 uses primary (blue) and Player 2 uses error (red) styling.
  */
 const winnerText = {
-  [PLAYER_ONE]: "is-primary",
-  [PLAYER_TWO]: "is-error",
+  [PLAYER_ONE]: "text-rose-500",
+  [PLAYER_TWO]: "text-amber-500",
 };
 
 /**

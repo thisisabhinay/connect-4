@@ -2,7 +2,7 @@
 import { createGameSession } from "@/actions/create-game-session";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/header";
-import { persistLastGame } from "@/utils/persistence";
+import { getLastGame, persistLastGame } from "@/utils/persistence";
 import { useEffect, useState } from "react";
 
 /**
@@ -17,7 +17,7 @@ export default function Home() {
    * Manages the URL of the last played game session
    * Initial value is retrieved from persistent storage via getLastGame()
    */
-  const [lastGame, setLastGame] = useState("");
+  const [lastGame, setLastGame] = useState(getLastGame());
 
   /**
    * Processes form submission to create a new game session
@@ -42,6 +42,10 @@ export default function Home() {
   useEffect(() => {
     persistLastGame(lastGame);
   }, [lastGame]);
+
+  useEffect(() => {
+    persistLastGame(getLastGame());
+  }, []);
 
   return (
     <main

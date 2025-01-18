@@ -35,6 +35,16 @@ const balloonDir: PlayerStyleMap = {
 };
 
 /**
+ * Maps player ID numbers to their corresponding style classes for visual indicators.
+ * Each number key represents a unique player, with associated CSS classes that define
+ * their display style (typically for status or state indication).
+ */
+const playerBage: PlayerStyleMap = {
+  1: "is-error",
+  2: "is-warning",
+};
+
+/**
  * Renders a player character with their associated sprite, name badge, and
  * conditional speech balloon. The sprite animates with a bounce effect when
  * the player wins. Speech balloons only display during active gameplay
@@ -61,7 +71,9 @@ export function PlayerCharacter({
             className={`animate ${characterMap[playerId]}  ${isWinner ? "animate-bounce" : ""}`}
           />
           <i className="nes-badge">
-            <span className="is-primary">P1: {playerName}</span>
+            <span className={playerBage[playerId]}>
+              P{playerId}: {playerName}
+            </span>
           </i>
         </div>
         {showBalloon && !gameOver ? (
