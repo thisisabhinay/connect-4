@@ -2,6 +2,8 @@
 
 A modern take on the classic Connect 4 game built with Next.js, featuring local two-player gameplay, game state persistence, and a charming retro-styled user interface inspired by the NES era. Players take turns dropping colored discs on the same device, with the goal of connecting four of their pieces in a row, either horizontally, vertically, or diagonally. The game state is saved after each move, allowing players to resume their match later.
 
+> **Refer system design document: [https://github.com/thisisabhinay/connect-4/blob/main/apps/game/README.md](https://github.com/thisisabhinay/connect-4/blob/main/apps/game/README.md)**
+
 ## Features
 
 - **Retro-Styled UI**: Implements NES.css for a nostalgic, 8-bit visual aesthetic
