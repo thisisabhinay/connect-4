@@ -4,14 +4,11 @@ import { useState, useCallback, useEffect } from "react";
 import { updateGameSession } from "@/actions/update-game-session";
 import { PLAYER_ONE, PLAYER_TWO } from "@/const";
 import { soundPlayer1, soundPlayer2 } from "@/config/sound-effects";
-
-export type FillColor = {
-  [key: number]: string;
-};
+import { PlayerStyleMap } from "@/types/style";
 
 export const NEXT_PLAYER_MAP: PlayerMap = { 1: 2, 2: 1 };
-export const PLAYER_COLORS: FillColor = {
-  1: "!bg-indigo-500 !border-solid",
+export const PLAYER_COLORS: PlayerStyleMap = {
+  1: "!bg-rose-500 !border-solid",
   2: "!bg-amber-500 !border-solid",
 };
 

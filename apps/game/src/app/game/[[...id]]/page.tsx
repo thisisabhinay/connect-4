@@ -18,6 +18,7 @@ export default function GamePage() {
   const [game, setGame] = useState<GameResource>();
   const [isLoading, setIsLoading] = useState(true);
   const [showConfetti, setShowConfetti] = useState(true);
+  const [winner, setWinner] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [error, setError] = useState<string>("");
   const [activePlayer, setActivePlayer] = useState<number>(
@@ -83,7 +84,9 @@ export default function GamePage() {
           <section className="message-list relative self-center justify-self-end">
             <section className="message -left">
               <div className="flex flex-col gap-2 items-center">
-                <i className="nes-charmander scale-x-[-1]" />
+                <i
+                  className={`nes-charmander scale-x-[-1] animate ${winner === PLAYER_ONE ? "animate-bounce" : ""}`}
+                />
                 <i className="nes-badge">
                   <span className="is-primary">P1: {game.playerNames[1]}</span>
                 </i>
@@ -103,13 +106,16 @@ export default function GamePage() {
                 setActivePlayer(activePlayer);
                 setShowConfetti([PLAYER_ONE, PLAYER_TWO].includes(winner));
                 setGameOver(isGameOver);
+                setWinner(winner);
               }}
             />
           </div>
           <section className="message-list relative self-center justify-self-start">
             <section className="message -left">
               <div className="flex flex-col gap-2 items-center">
-                <i className="nes-kirby" />
+                <i
+                  className={`nes-kirby animate ${winner === PLAYER_TWO ? "animate-bounce" : ""}`}
+                />
                 <i className="nes-badge">
                   <span className="is-error">P2: {game.playerNames[2]}</span>
                 </i>

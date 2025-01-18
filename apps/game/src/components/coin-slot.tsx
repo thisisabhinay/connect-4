@@ -1,7 +1,6 @@
 import { Coin } from "@/enum";
+import { PlayerStyleMap } from "@/types/style";
 import clsx from "clsx";
-import { P1, P2 } from "@repo/assets/sound";
-import { PLAYER_ONE, PLAYER_TWO } from "@/const";
 
 export interface CoinSlot {
   filled?: string;
@@ -20,16 +19,14 @@ export function CoinSlot({
   isAllowed,
   handlePlayerMove,
   isWinningCell,
-  player,
   value,
   isGameOver,
   i,
   j,
 }: CoinSlot) {
-  const slotShadow: { [key: number]: string } = {
-    0: "",
-    1: "shadow-blue-500 ",
-    2: "shadow-amber-500",
+  const slotRing: PlayerStyleMap = {
+    1: "ring-[6px] ring-rose-200",
+    2: "ring-[6px] ring-amber-200",
   };
 
   function initPlayerMove(i: number, j: number) {
@@ -46,19 +43,18 @@ export function CoinSlot({
         Coin.Size,
         filled,
         isAllowed
-          ? "cursor-pointer transform hover:scale-110 hover:border-slate-800"
-          : "cursor-not-allowed bg-slate-50 border-dotted",
-        slotShadow[value],
-        isWinningCell ? "shadow-xl" : "shadow-md",
-        "cursor-pointer border-8 rounded-full !border-slate-800/20",
+          ? "cursor-pointer transform hover:scale-110 hover:border-black"
+          : "cursor-not-allowed bg-blue-400 border-none",
+        "cursor-pointer border-[6px] rounded-full !border-black",
         "transition-all duration-200 ease-out",
         "flex-shrink-0",
+        isWinningCell ? slotRing[value] : "",
         isWinningCell
           ? isGameOver
             ? "!cursor-not-allowed opacity-100"
             : ""
           : isGameOver
-            ? "!cursor-not-allowed opacity-60"
+            ? "!cursor-not-allowed opacity-40"
             : "",
       )}
     />
