@@ -42,7 +42,7 @@ connect-4/
 
 - **Frontend**:
 
-  - Next.js 14 (React Framework)
+  - Next.js 15 (React Framework)
   - TypeScript
   - Tailwind CSS
   - NES.css (Retro styling)
