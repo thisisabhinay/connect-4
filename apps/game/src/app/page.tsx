@@ -2,16 +2,26 @@
 import { createGameSession } from "@/actions/create-game-session";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/header";
+import { getLastGame, persistLastGame } from "@/utils/persistence";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const router = useRouter();
+  const [lastGame, setLastGame] = useState(getLastGame());
+
   async function handleSubmit(formData: FormData) {
     const game = await createGameSession(formData);
 
     if (game.id) {
-      router.push(`/game/${game.id}`);
+      const url = `/game/${game.id}`;
+      router.push(url);
+      setLastGame(url);
     }
   }
+
+  useEffect(() => {
+    persistLastGame(lastGame);
+  }, [lastGame]);
 
   return (
     <main
@@ -78,10 +88,19 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex items-center justify-center flex-1 mt-6">
+            <div className="flex flex-col items-center justify-center flex-1 mt-6 gap-4">
               <button type="submit" className="nes-btn is-warning">
-                Start Game
+                Start New Game
               </button>
+              {lastGame ? (
+                <button
+                  type="button"
+                  className="nes-btn is-default"
+                  onClick={() => router.push(lastGame)}
+                >
+                  Resume Last Game
+                </button>
+              ) : null}
             </div>
           </form>
 

@@ -6,6 +6,7 @@ import { PLAYER_ONE, PLAYER_TWO } from "@/const";
 import { useWindowSize } from "@/hooks/use-window-size";
 import { GameResource } from "@/types/game";
 import axios from "axios";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
@@ -59,7 +60,22 @@ export default function GamePage() {
 
       {isLoading ? <div className="text-center">Loading game...</div> : null}
 
-      {error ? <div className="text-red-500 text-center">{error}</div> : null}
+      {error ? (
+        <div className="text-red-500 text-center flex flex-col gap-4 justify-center items-center">
+          <span className="bg-black w-fit p-3">{error}</span>
+          <div className="flex items-center gap-4">
+            <Link href="/" className="nes-btn is-default">
+              Exit Game
+            </Link>
+            <button
+              className="nes-btn is-warning"
+              onClick={() => window.location.reload()}
+            >
+              Reload Session
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       {game?.id ? (
         <div className="h-full max-w-screen-xl mx-auto grid md:grid-cols-[auto_max-content_auto] grid-rows-[1fr] gap-10 justify-center md:px-10 xl:px-20 pb-20">
