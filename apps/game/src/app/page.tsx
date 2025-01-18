@@ -5,10 +5,26 @@ import { Header } from "@/components/header";
 import { getLastGame, persistLastGame } from "@/utils/persistence";
 import { useEffect, useState } from "react";
 
+/**
+ * Home page component that handles game session creation and persistence
+ * Implements a form for collecting player names and board dimensions
+ * Provides functionality to resume the last played game session
+ */
 export default function Home() {
   const router = useRouter();
+
+  /**
+   * Manages the URL of the last played game session
+   * Initial value is retrieved from persistent storage via getLastGame()
+   */
   const [lastGame, setLastGame] = useState(getLastGame());
 
+  /**
+   * Processes form submission to create a new game session
+   * Creates game with provided player names and board dimensions
+   * Redirects to the game page on successful creation
+   * Updates lastGame state with the new game URL
+   */
   async function handleSubmit(formData: FormData) {
     const game = await createGameSession(formData);
 
@@ -19,6 +35,10 @@ export default function Home() {
     }
   }
 
+  /**
+   * Persists lastGame URL whenever it changes
+   * Enables game session resumption across page reloads
+   */
   useEffect(() => {
     persistLastGame(lastGame);
   }, [lastGame]);
@@ -31,13 +51,19 @@ export default function Home() {
       <Header />
 
       <div className="p-8 flex items-center justify-center relative">
+        {/* Animated octokat icon positioned above the form container */}
         <i className="nes-octocat animate duration-500 absolute z-0 -top-10 hover:top-[-1rem]" />
+
+        {/* NES-styled form container with higher z-index to appear above the octokat */}
         <div className="z-10 max-w-md mx-auto bg-white rounded flex flex-col gap-4 relative nes-container with-title is-rounded">
           <h1 className="nes-text is-primary text-2xl font-bold text-center mb-6">
             New Game Session
           </h1>
+
+          {/* Game configuration form with grid layout that adapts from 1 to 2 columns on md breakpoint */}
           <form action={handleSubmit}>
             <div className="grid grid-cols-1 grid-rows-4 md:grid-cols-2 md:grid-rows-2 gap-4">
+              {/* Player name inputs with NES styling */}
               <div className="nes-field">
                 <label htmlFor="player1">Player 1</label>
                 <input
@@ -60,6 +86,8 @@ export default function Home() {
                   required
                 />
               </div>
+
+              {/* Board dimension inputs with minimum size constraint of 4x4 */}
               <div className="nes-field">
                 <label htmlFor="rows">Rows</label>
                 <input
@@ -88,6 +116,7 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Action buttons container with conditional rendering of resume button */}
             <div className="flex flex-col items-center justify-center flex-1 mt-6 gap-4">
               <button type="submit" className="nes-btn is-warning">
                 Start New Game
@@ -104,17 +133,19 @@ export default function Home() {
             </div>
           </form>
 
+          {/* Social links with NES-styled icons */}
           <section className="flex items-center justify-center gap-4 py-6">
             <a
               href="https://x.com/thisisabhinay"
               target="_blank"
               className="nes-icon twitter is-large"
-            ></a>
+            />
+
             <a
               href="https://www.linkedin.com/in/thisisabhinay"
               target="_blank"
               className="nes-icon linkedin is-large"
-            ></a>
+            />
           </section>
         </div>
       </div>

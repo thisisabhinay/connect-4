@@ -15,6 +15,20 @@ const DIRECTIONS = {
   antiDiagonal: { row: -1, col: 1 },
 };
 
+/**
+ * Evaluates a sequence of cells in a specified direction to detect a winning combination.
+ * Uses vector-based direction mapping to traverse the board from a starting position.
+ * Returns early if any cell in the sequence doesn't match the player's value or exceeds board boundaries.
+ *
+ * @param board - Normalized game state with cell positions as keys (row_col format)
+ * @param startRow - Initial row position to begin checking sequence
+ * @param startCol - Initial column position to begin checking sequence
+ * @param player - Numeric identifier of the current player being checked
+ * @param direction - Vector direction to check (horizontal, vertical, diagonal, antiDiagonal)
+ * @param rows - Total number of rows in the game board
+ * @param cols - Total number of columns in the game board
+ * @returns Array of winning cell positions if found, empty array otherwise
+ */
 export function checkWinInDirection(
   board: NormalizedGameState,
   startRow: number,
@@ -33,7 +47,6 @@ export function checkWinInDirection(
     const key = `${row}_${col}` as NormalKey;
     const cell = board[key] ?? 0;
 
-    // Add bounds checking to prevent out-of-bounds access
     if (row < 0 || row >= rows || col < 0 || col >= cols) {
       return [];
     }
@@ -48,6 +61,20 @@ export function checkWinInDirection(
   return winningCells;
 }
 
+/**
+ * Identifies winning combinations from the last played position.
+ * Checks each possible winning direction by moving backwards from the last move,
+ * examining all potential starting positions that could form a winning sequence.
+ * Implements boundary validation before initiating directional checks to optimize performance.
+ *
+ * @param board - Normalized game state with cell positions as keys
+ * @param lastRow - Row position of the last move
+ * @param lastCol - Column position of the last move
+ * @param player - Numeric identifier of the player who made the last move
+ * @param rows - Total number of rows in the game board
+ * @param cols - Total number of columns in the game board
+ * @returns Array of positions forming the winning sequence, empty if no win found
+ */
 export function checkWin(
   board: NormalizedGameState,
   lastRow: number,
@@ -56,16 +83,12 @@ export function checkWin(
   rows: number,
   cols: number,
 ): Position[] {
-  // Check all possible winning directions from the last move
   for (const direction of Object.keys(DIRECTIONS) as WinningDirection[]) {
-    // We need to check multiple starting positions for each direction
     for (let i = 0; i < WINNING_LENGTH; i++) {
       const dir = DIRECTIONS[direction];
-      // Calculate the starting position by moving backwards
       const startRow = lastRow - dir.row * i;
       const startCol = lastCol - dir.col * i;
 
-      // Skip if starting position would lead to out-of-bounds checks
       if (
         startRow < 0 ||
         startRow + dir.row * (WINNING_LENGTH - 1) >= rows ||
@@ -93,6 +116,14 @@ export function checkWin(
   return [];
 }
 
+/**
+ * Determines if the game board has no empty cells remaining.
+ * Validates board existence and type before checking cell values.
+ * Uses object values lookup to detect presence of empty cells.
+ *
+ * @param game - Game object containing the board state
+ * @returns Boolean indicating if board is completely filled
+ */
 export function isBoardFull({ board }: Game) {
   if (!board || typeof board !== "object") {
     return false;
@@ -101,6 +132,15 @@ export function isBoardFull({ board }: Game) {
   return !Object.values(board).includes(EMPTY_CELL_VALUE);
 }
 
+/**
+ * Creates a normalized game board with empty cells.
+ * Generates a map object with row_col string keys for efficient lookups.
+ * Initializes all cells with EMPTY_CELL_VALUE for consistent state handling.
+ *
+ * @param rows - Number of rows to generate in the board
+ * @param cols - Number of columns to generate in the board
+ * @returns Normalized game state object with empty cells
+ */
 export function generateEmptyBoard(
   rows: number,
   cols: number,

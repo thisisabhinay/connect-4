@@ -2,6 +2,10 @@ import { Coin } from "@/enum";
 import { PlayerStyleMap } from "@/types/style";
 import clsx from "clsx";
 
+/**
+ * Represents the core structural interface for a Connect Four game slot.
+ * Tracks position, player ownership, game state, and click handlers.
+ */
 export interface CoinSlot {
   filled?: string;
   i: number;
@@ -14,6 +18,19 @@ export interface CoinSlot {
   value: number;
 }
 
+/**
+ * Renders an individual slot in the Connect Four grid. Manages the visual state
+ * including hover effects, winning combinations, and game-over states.
+ *
+ * @param filled - CSS classes for the coin's appearance when occupied
+ * @param isAllowed - Controls if a move can be made in this slot
+ * @param handlePlayerMove - Callback triggered when a valid move is made
+ * @param isWinningCell - Flags if this slot is part of the winning combination
+ * @param value - Numeric identifier for the player who owns this slot
+ * @param isGameOver - Controls end-game visual states and click behaviors
+ * @param i - Vertical position in the grid (row)
+ * @param j - Horizontal position in the grid (column)
+ */
 export function CoinSlot({
   filled = "",
   isAllowed,
@@ -24,11 +41,19 @@ export function CoinSlot({
   i,
   j,
 }: CoinSlot) {
+  /**
+   * Maps player numbers to their respective winning slot styles.
+   * Player 1 uses rose color scheme, Player 2 uses amber.
+   */
   const slotRing: PlayerStyleMap = {
     1: "ring-[6px] ring-rose-200",
     2: "ring-[6px] ring-amber-200",
   };
 
+  /**
+   * Processes click events on slots. Prevents moves after game completion
+   * and delegates to the main game handler for valid moves.
+   */
   function initPlayerMove(i: number, j: number) {
     if (isGameOver) return;
     handlePlayerMove(i, j);

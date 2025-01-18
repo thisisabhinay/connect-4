@@ -13,21 +13,77 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 
+/**
+ * API endpoint for game operations, fallback to empty if env var missing
+ */
 const BASE_URL = process.env.NEXT_PUBLIC_GAME_URL ?? "";
 
+/**
+ * Handles the core game loop and state management for a two-player board game.
+ * Manages asynchronous game data fetching, player turns, win conditions, and UI state.
+ * Uses URL params to identify and load specific game instances from the API.
+ */
 export default function GamePage() {
+  /**
+   * Extracts game ID from Next.js route params to identify which game to load
+   */
   const { id } = useParams();
+
+  /**
+   * Core game state including board configuration, player names, and game progress.
+   * Reset on new game fetch or error conditions.
+   */
   const [game, setGame] = useState<GameResource>();
+
+  /**
+   * Loading state gates UI rendering during async operations.
+   * True during initial load and subsequent game data fetches.
+   */
   const [isLoading, setIsLoading] = useState(true);
+
+  /**
+   * Controls celebration animation visibility on game completion.
+   * Triggered when either player achieves victory conditions.
+   */
   const [showConfetti, setShowConfetti] = useState(true);
+
+  /**
+   * Tracks winning player's ID for victory animations and UI updates.
+   * 0 indicates no winner, PLAYER_ONE/PLAYER_TWO for victory states.
+   */
   const [winner, setWinner] = useState(0);
+
+  /**
+   * Signals game completion state for UI behavior changes.
+   * Prevents further moves and enables end-game animations.
+   */
   const [gameOver, setGameOver] = useState(false);
+
+  /**
+   * Stores error messages from failed API operations.
+   * Displayed to user and triggers fallback UI states.
+   */
   const [error, setError] = useState<string>("");
+
+  /**
+   * Identifies current turn holder for move validation and UI indicators.
+   * Initialized from game state if available, defaults to 0.
+   */
   const [activePlayer, setActivePlayer] = useState<number>(
     game?.activePlayer ?? 0,
   );
+
+  /**
+   * Window dimensions for confetti animation boundaries.
+   * Updates responsively with window resizing.
+   */
   const { width, height } = useWindowSize();
 
+  /**
+   * Initiates game data fetch when component mounts or game ID changes.
+   * Handles API error states and updates local storage with successful game loads.
+   * Cleans up loading states in finally block to prevent UI stuck states.
+   */
   useEffect(() => {
     async function fetchGame() {
       setIsLoading(true);

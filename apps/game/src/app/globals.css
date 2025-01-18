@@ -1,27 +1,53 @@
+/**
+* Imports Tailwind's core styling modules that provide the foundation
+* for utility-first CSS approach
+*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/**
+* Defines color scheme constants for the application theme
+* --background used for page backdrop (#000000 pure black)
+* --foreground used for content elements (#171717 off-black)
+*/
 :root {
   --background: #000000;
   --foreground: #171717;
 }
 
+/**
+* Forces full height rendering and sets default black background
+* to prevent white flashing during page load
+*/
 html {
   height: 100%;
   background: #000;
 }
 
+/**
+* Applies theme colors and custom Press Start 2P pixel font
+* for retro-gaming aesthetic across all body content
+*/
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-press-start-2p);
 }
 
+/**
+* Ensures main content container spans full viewport height
+* for proper layout structuring
+*/
 main {
   height: 100%;
 }
 
+/**
+* Safari-specific fix for NES.css input/textarea border rendering
+* Targets WebKit browsers with specific pixel ratio requirements
+* Forces border image to repeat properly in rounded pattern
+*/
 @media all and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
   .nes-input,
   .nes-textarea {
@@ -29,6 +55,11 @@ main {
   }
 }
 
+/**
+* Safari-specific fix for NES.css container border rendering
+* Ensures rounded containers display border images correctly
+* without distortion in WebKit browsers
+*/
 @media all and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
   .nes-container.is-rounded {
     border-image-repeat: round !important;

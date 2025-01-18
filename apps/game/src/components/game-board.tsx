@@ -7,6 +7,18 @@ import { useEffect, useRef } from "react";
 import { goToStartScreen } from "@/actions/goto-start-screen";
 import { ModalGameOver } from "./modal-game-over";
 
+/**
+ * Public interface representing the core game board contract, extending base game configuration.
+ * Requires implementation of player state notification system through onPlayerUpdateAction.
+ *
+ * The callback receives 3 critical game state parameters:
+ * - activePlayer: Current turn's player number (1 or 2)
+ * - winner: Victor's player number, 0 indicates draw state
+ * - isGameOver: Terminal state flag indicating no more valid moves
+ *
+ * This interface ensures parent components can track game progression and
+ * orchestrate UI updates based on player actions and game completion states.
+ */
 export interface GameBoard extends GameResource {
   onPlayerUpdateAction: (
     activePlayer: number,
@@ -15,11 +27,29 @@ export interface GameBoard extends GameResource {
   ) => void;
 }
 
+/**
+ * Board game component implementing Connect Four game logic with win detection
+ * and modal display for game completion states. Maintains game progression
+ * through player turns and validates move legality.
+ *
+ * @param onPlayerUpdateAction Callback fired after each player action with updated game state
+ * @param initalGameState Contains rows, cols, and other game configuration from parent
+ */
 export function GameBoard({
   onPlayerUpdateAction,
   ...initalGameState
 }: GameBoard) {
+  /**
+   * Stores reference to game completion modal for programmatic show/hide.
+   * Modal displays win/draw state and provides game reset options.
+   */
   const modalRef = useRef<HTMLDialogElement>(null);
+
+  /**
+   * Processes legal moves by updating board state and checking win conditions.
+   * Winning cells are tracked for highlighting the connected pieces.
+   * Player colors are managed through getPlayerColor mapping.
+   */
   const {
     board: gameBoard,
     activePlayer,
@@ -33,10 +63,22 @@ export function GameBoard({
     winningCells,
   } = useGameState(initalGameState);
 
+  /**
+   * Transforms winning cell coordinates into string keys matching board state format.
+   * Used to highlight connected pieces that caused game victory.
+   */
   const winningIndexes = winningCells.map((cell) => `${cell.row}_${cell.col}`);
 
+  /**
+   * Game ends in draw when no winner exists but no legal moves remain.
+   * Controls modal content and restart options display.
+   */
   const isDraw = isGameOver && winner === 0;
 
+  /**
+   * Modal control functions using native HTML dialog element.
+   * Automatically triggered when game reaches terminal state.
+   */
   function openDialog() {
     const modal = modalRef.current as HTMLDialogElement;
     modal?.showModal();
@@ -49,10 +91,13 @@ export function GameBoard({
 
   if (isGameOver) openDialog();
 
+  /**
+   * Notifies parent component of game state changes after player actions.
+   * Enables external components to react to game progression.
+   */
   useEffect(() => {
     onPlayerUpdateAction(activePlayer, winner, isGameOver);
   }, [activePlayer, isGameOver, onPlayerUpdateAction, winner]);
-
   return (
     <div
       data-comp="GameBoard"
