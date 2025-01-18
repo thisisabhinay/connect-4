@@ -1,7 +1,5 @@
-import { GameDraw, GameWin, P1, P2 } from "@repo/assets/sound";
+export const soundGameWin = new Audio("/sounds/game-win.mp3");
+export const soundGameDraw = new Audio("/sounds/game-win.mp3");
 
-export const soundGameWin = new Audio(GameWin);
-export const soundGameDraw = new Audio(GameDraw);
-
-export const soundPlayer1 = new Audio(P1);
-export const soundPlayer2 = new Audio(P2);
+export const soundPlayer1 = new Audio("/sounds/p1.mp3");
+export const soundPlayer2 = new Audio("/sounds/p2.mp3");

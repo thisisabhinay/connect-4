@@ -8,8 +8,8 @@ import { LOCAL_PERSISTENCE_KEY } from "@/const";
  * @param url The fully qualified URL of the game to persist
  */
 export function persistLastGame(url: string) {
-  localStorage.setItem(LOCAL_PERSISTENCE_KEY, "");
-  localStorage.setItem(LOCAL_PERSISTENCE_KEY, url);
+  window.localStorage.setItem(LOCAL_PERSISTENCE_KEY, "");
+  window.localStorage.setItem(LOCAL_PERSISTENCE_KEY, url);
 }
 
 /**
@@ -20,5 +20,5 @@ export function persistLastGame(url: string) {
  * @returns The stored game URL or an empty string if none exists
  */
 export function getLastGame(): string {
-  return localStorage.getItem(LOCAL_PERSISTENCE_KEY) ?? "";
+  return window.localStorage.getItem(LOCAL_PERSISTENCE_KEY) ?? "";
 }

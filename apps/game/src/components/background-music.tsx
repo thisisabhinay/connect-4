@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { RetroMusic } from "@repo/assets/sound";
 import { SpeakerOn, SpeakerOff } from "@repo/assets/image";
 import { NESCursor } from "@/config/nes-cursor";
 
@@ -60,7 +59,7 @@ export function BackgroundMusic() {
   return (
     <div className="relative">
       {/* Preloads audio file to minimize playback delay on first interaction */}
-      <audio ref={audioRef} src={RetroMusic} loop preload="auto" />
+      <audio ref={audioRef} src="/sounds/retro-music.mp3" loop preload="auto" />
 
       <div
         onClick={toggleSound}
