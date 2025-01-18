@@ -1,21 +1,37 @@
 import { NESCursor } from "@/config/nes-cursor";
 import { PlayerName } from "@/types/game";
 import { forwardRef, HTMLProps } from "react";
+import Image from "next/image";
+import { CryingCat } from "@repo/assets/image";
+import { PLAYER_ONE, PLAYER_TWO } from "@/const";
+import { soundGameDraw, soundGameWin } from "@/config/sound-effects";
 
 interface ModalGameOverProps extends HTMLProps<HTMLDialogElement> {
   title: string;
   playerNames: PlayerName;
   winner: number;
+  isDraw: boolean;
   close: () => void;
   goToStartScreen: () => void;
   resetGame: () => void;
 }
 
+const winnerText = {
+  [PLAYER_ONE]: "is-primary",
+  [PLAYER_TWO]: "is-error",
+};
+
 export const ModalGameOver = forwardRef<HTMLDialogElement, ModalGameOverProps>(
-  ({ title, close, resetGame, goToStartScreen, winner, playerNames }, ref) => {
+  (
+    { title, close, resetGame, goToStartScreen, winner, playerNames, isDraw },
+    ref,
+  ) => {
+    if (isDraw) soundGameDraw.play();
+    if (winner) soundGameWin.play();
+
     return (
       <dialog
-        className="nes-dialog border-black w-1/2"
+        className="nes-dialog border-black w-full lg:w-1/2"
         id="dialog-default"
         ref={ref}
       >
@@ -28,22 +44,41 @@ export const ModalGameOver = forwardRef<HTMLDialogElement, ModalGameOverProps>(
               onClick={close}
             />
           </p>
-          <div className="flex items-center justify-center gap-2">
-            <i className="nes-icon is-large star" />
-            <i className="nes-icon is-large star" />
-            <i className="nes-icon is-large star" />
-          </div>
-          {winner === 1 ? <i className="nes-charmander scale-x-[-1]" /> : null}
-          {winner === 2 ? <i className="nes-kirby" /> : null}
 
-          <p>
-            <span
-              className={`nes-text is-${winner === 1 ? "primary" : "error"}`}
-            >
-              {playerNames[winner]}&nbsp;
-            </span>
-            is the winner.
-          </p>
+          {winner && !isDraw ? (
+            <div className="flex items-center justify-center gap-2">
+              <i className="nes-icon is-large star" />
+              <i className="nes-icon is-large star" />
+              <i className="nes-icon is-large star" />
+            </div>
+          ) : null}
+
+          {isDraw ? (
+            <Image
+              src={CryingCat.src}
+              width={Math.round(CryingCat.width / 1.5)}
+              height={Math.round(CryingCat.height / 1.5)}
+              alt="Crying cat"
+            />
+          ) : null}
+
+          {winner === PLAYER_ONE && !isDraw ? (
+            <i className="nes-charmander scale-x-[-1]" />
+          ) : null}
+
+          {winner === PLAYER_TWO && !isDraw ? (
+            <i className="nes-kirby" />
+          ) : null}
+
+          {winner && !isDraw ? (
+            <p>
+              <span className={`nes-text ${winnerText[winner]}`}>
+                {playerNames[winner]}&nbsp;
+              </span>
+              is the winner.
+            </p>
+          ) : null}
+
           <div className="nes-field w-full my-5">
             <label htmlFor="game-url">Game Link:</label>
             <input
@@ -54,6 +89,7 @@ export const ModalGameOver = forwardRef<HTMLDialogElement, ModalGameOverProps>(
               defaultValue={window.location.href}
             />
           </div>
+
           <menu className="dialog-menu flex items-center justify-center gap-4">
             <button className="nes-btn" onClick={goToStartScreen}>
               Exit Game

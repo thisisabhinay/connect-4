@@ -5,11 +5,14 @@ import { CoinElement } from "./coin";
 import { useGameState } from "@/hooks/use-game-state";
 import { useEffect, useRef } from "react";
 import { goToStartScreen } from "@/actions/goto-start-screen";
-import { NESCursor } from "@/config/nes-cursor";
 import { ModalGameOver } from "./modal-game-over";
 
 export interface GameBoardProps extends GameResource {
-  onPlayerUpdateAction: (activePlayer: number) => void;
+  onPlayerUpdateAction: (
+    activePlayer: number,
+    winner: number,
+    isGameOver: boolean,
+  ) => void;
 }
 
 export function GameBoard({
@@ -32,6 +35,8 @@ export function GameBoard({
 
   const winningIndexes = winningCells.map((cell) => `${cell.row}_${cell.col}`);
 
+  const isDraw = isGameOver && winner === 0;
+
   function openDialog() {
     const modal = modalRef.current as HTMLDialogElement;
     modal?.showModal();
@@ -42,9 +47,11 @@ export function GameBoard({
     modal?.close();
   }
 
+  if (isGameOver) openDialog();
+
   useEffect(() => {
-    onPlayerUpdateAction(activePlayer);
-  }, [activePlayer, onPlayerUpdateAction]);
+    onPlayerUpdateAction(activePlayer, winner, isGameOver);
+  }, [activePlayer, isGameOver, onPlayerUpdateAction, winner]);
 
   return (
     <div
@@ -52,25 +59,31 @@ export function GameBoard({
       className="mx-auto h-full w-auto max-w-screen-lg max-h-[75svh] overflow-auto p-10 bg-white rounded-xl shadow-sm border border-slate-200 nes-container is-rounded"
     >
       <div className="grid grid-cols-1 auto-rows-max gap-10">
-        <div id="game-stats" className="mb-4">
-          <section>
+        <div
+          id="game-stats"
+          className={`mb-4 text-center ${isGameOver ? "block" : "hidden"}`}
+        >
+          {isGameOver ? (
             <button
               type="button"
-              className="nes-btn is-primary"
+              className="nes-btn is-default"
               onClick={openDialog}
             >
-              Open dialog
+              Game Status
             </button>
-            <ModalGameOver
-              ref={modalRef}
-              winner={winner}
-              title={""}
-              close={closeDialog}
-              resetGame={resetGame}
-              goToStartScreen={goToStartScreen}
-              playerNames={playerNames}
-            />
-          </section>
+          ) : null}
+          <ModalGameOver
+            ref={modalRef}
+            winner={winner}
+            title={
+              winner && !isDraw ? `Player ${winner} wins!` : "It's a draw!"
+            }
+            close={closeDialog}
+            isDraw={isDraw}
+            resetGame={resetGame}
+            goToStartScreen={goToStartScreen}
+            playerNames={playerNames}
+          />
         </div>
         <div id="board-grid">
           {Array(initalGameState.rows)
@@ -78,7 +91,7 @@ export function GameBoard({
             ?.map((row, i) => (
               <div
                 key={i}
-                className="flex flex-shrink-0 items-center gap-4 mb-4"
+                className="flex flex-shrink-0 items-center gap-4 mb-4 last:mb-0"
               >
                 {Array(initalGameState.cols)
                   .fill(0)

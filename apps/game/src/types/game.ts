@@ -11,6 +11,8 @@ export type WinningDirection =
 
 export type NormalKey = `${number}_${number}`;
 export type PlayerName = { [key: number]: string };
+export type PlayerMap = { [key: number]: number };
+
 export interface NormalizedGameState {
   [key: NormalKey]: number;
 }

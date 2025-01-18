@@ -2,10 +2,13 @@
 
 import { GameBoard } from "@/components/game-board";
 import { Header } from "@/components/header";
+import { PLAYER_ONE, PLAYER_TWO } from "@/const";
+import { useWindowSize } from "@/hooks/use-window-size";
 import { GameResource } from "@/types/game";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Confetti from "react-confetti";
 
 const BASE_URL = process.env.NEXT_PUBLIC_GAME_URL ?? "";
 
@@ -13,10 +16,13 @@ export default function GamePage() {
   const { id } = useParams();
   const [game, setGame] = useState<GameResource>();
   const [isLoading, setIsLoading] = useState(true);
+  const [showConfetti, setShowConfetti] = useState(true);
+  const [gameOver, setGameOver] = useState(false);
   const [error, setError] = useState<string>("");
   const [activePlayer, setActivePlayer] = useState<number>(
     game?.activePlayer ?? 0,
   );
+  const { width, height } = useWindowSize();
 
   useEffect(() => {
     async function fetchGame() {
@@ -57,6 +63,7 @@ export default function GamePage() {
 
       {game?.id ? (
         <div className="h-full max-w-screen-xl mx-auto grid md:grid-cols-[auto_max-content_auto] grid-rows-[1fr] gap-10 justify-center md:px-10 xl:px-20 pb-20">
+          {showConfetti ? <Confetti width={width} height={height} /> : null}
           <section className="message-list relative self-center justify-self-end">
             <section className="message -left">
               <div className="flex flex-col gap-2 items-center">
@@ -65,7 +72,7 @@ export default function GamePage() {
                   <span className="is-primary">P1: {game.playerNames[1]}</span>
                 </i>
               </div>
-              {activePlayer === 1 ? (
+              {activePlayer === 1 && !gameOver ? (
                 <div className="nes-balloon from-right absolute -top-28 -left-28">
                   <p>My turn</p>
                 </div>
@@ -76,9 +83,11 @@ export default function GamePage() {
             <i className="nes-octocat animate duration-500 absolute z-0 top-10 -left-14 -rotate-[56deg] hover:left-[-2.5rem]" />
             <GameBoard
               {...game}
-              onPlayerUpdateAction={(activePlayer) =>
-                setActivePlayer(activePlayer)
-              }
+              onPlayerUpdateAction={(activePlayer, winner, isGameOver) => {
+                setActivePlayer(activePlayer);
+                setShowConfetti([PLAYER_ONE, PLAYER_TWO].includes(winner));
+                setGameOver(isGameOver);
+              }}
             />
           </div>
           <section className="message-list relative self-center justify-self-start">
@@ -89,7 +98,7 @@ export default function GamePage() {
                   <span className="is-error">P2: {game.playerNames[2]}</span>
                 </i>
               </div>
-              {activePlayer === 2 ? (
+              {activePlayer === 2 && !gameOver ? (
                 <div className="nes-balloon from-left absolute -top-28 -right-28">
                   <p>My turn</p>
                 </div>

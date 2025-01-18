@@ -1,14 +1,12 @@
-import { Game, GameResource, NormalKey } from "@/types/game";
+import { Game, GameResource, NormalKey, PlayerMap } from "@/types/game";
 import { checkWin, generateEmptyBoard, isBoardFull } from "@/utils/game";
 import { useState, useCallback, useEffect } from "react";
 import { updateGameSession } from "@/actions/update-game-session";
+import { PLAYER_ONE, PLAYER_TWO } from "@/const";
+import { soundPlayer1, soundPlayer2 } from "@/config/sound-effects";
 
 export type FillColor = {
   [key: number]: string;
-};
-
-export type PlayerMap = {
-  [key: number]: number;
 };
 
 export const NEXT_PLAYER_MAP: PlayerMap = { 1: 2, 2: 1 };
@@ -65,16 +63,25 @@ export function useGameState(initialGameState: GameResource) {
           Boolean(winningCells.length) ||
           isBoardFull({ board: newBoard, cols: prev.cols } as Game);
 
+        const activePlayer = isGameOver
+          ? prev.activePlayer
+          : NEXT_PLAYER_MAP[prev.activePlayer];
+
+        if (activePlayer === PLAYER_ONE) soundPlayer1.play();
+        if (activePlayer === PLAYER_TWO) soundPlayer2.play();
+
         return {
           ...prev,
           lastUpdate: new Date().toISOString(),
           board: newBoard,
           lastPlayer: prev.activePlayer,
-          activePlayer: isGameOver
-            ? prev.activePlayer
-            : NEXT_PLAYER_MAP[prev.activePlayer],
+          activePlayer: activePlayer,
           isGameOver,
-          winner: winningCells ? prev.activePlayer : 0,
+          winner: winningCells.length
+            ? isGameOver
+              ? prev.activePlayer
+              : 0
+            : 0,
           winningCells: winningCells || [],
         };
       });

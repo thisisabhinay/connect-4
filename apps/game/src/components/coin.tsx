@@ -1,5 +1,7 @@
 import { Coin } from "@/enum";
 import clsx from "clsx";
+import { P1, P2 } from "@repo/assets/sound";
+import { PLAYER_ONE, PLAYER_TWO } from "@/const";
 
 export interface CoinElement {
   filled?: string;
