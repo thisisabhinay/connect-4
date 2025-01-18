@@ -18,6 +18,8 @@ Enter the new game session details, such as the names of both players and the nu
 
 Each game session has a dedicated Connect4 board. I tried to improve the interaction for a better gameplay experience. Instead of inserting a coin at the top and waiting for it to fall into place, I made user interaction more responsive by implementing click-based interaction and limiting it to only valid slots. This results in a faster and smoother gameplay experience.
 
+## Game Mechanics and Win Detection
+
 ![Player Indication](https://raw.githubusercontent.com/thisisabhinay/connect-4/refs/heads/main/assets/3-min.png)
 
 Each player is represented by a dedicated character, and a speech bubble appears at the top signaling the active player.
@@ -37,12 +39,16 @@ This board checks for all four win conditions:
 
 The game also handles the draw case.
 
+## Session Management and Persistence
+
 As you can see from the shareable link, we are now not only persisting the active session but also keeping a record of all game sessions and have made them readily available to play through.
 
 ![Share Link](https://raw.githubusercontent.com/thisisabhinay/connect-4/refs/heads/main/assets/8-min.png)
 ![Session Access](https://raw.githubusercontent.com/thisisabhinay/connect-4/refs/heads/main/assets/9-min.png)
 
 Just copy the link and paste it in any browser to access that game session. Furthermore, users can play multiple games inside each session by resetting the game at the end.
+
+## Future Plans
 
 Why I added "reset gaming session" functionality:
 
@@ -53,10 +59,14 @@ Why I added "reset gaming session" functionality:
 - After that, I want to create a true multiplayer experience using web sockets where players can engage in text chat while gaming
 - This is not on the priority list for now
 
+## Navigation and User Experience Features
+
 ![Resume Session](https://raw.githubusercontent.com/thisisabhinay/connect-4/refs/heads/main/assets/10-min.png)
 ![Resume Button](https://raw.githubusercontent.com/thisisabhinay/connect-4/refs/heads/main/assets/10B-min.png)
 
 Now if you exit back to the home screen from an active session, you can see a "Resume last session" button being shown for quickly navigating to the last played session on the device.
+
+## Backend
 
 ![Backend](https://raw.githubusercontent.com/thisisabhinay/connect-4/refs/heads/main/assets/11-min.png)
 ![JSON Server](https://raw.githubusercontent.com/thisisabhinay/connect-4/refs/heads/main/assets/12-min.png)
