@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 import { goToStartScreen } from "@/actions/goto-start-screen";
 import { ModalGameOver } from "./modal-game-over";
 
-export interface GameBoardProps extends GameResource {
+export interface GameBoard extends GameResource {
   onPlayerUpdateAction: (
     activePlayer: number,
     winner: number,
@@ -18,7 +18,7 @@ export interface GameBoardProps extends GameResource {
 export function GameBoard({
   onPlayerUpdateAction,
   ...initalGameState
-}: GameBoardProps) {
+}: GameBoard) {
   const modalRef = useRef<HTMLDialogElement>(null);
   const {
     board: gameBoard,

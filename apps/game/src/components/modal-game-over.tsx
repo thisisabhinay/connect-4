@@ -6,7 +6,7 @@ import { CryingCat } from "@repo/assets/image";
 import { PLAYER_ONE, PLAYER_TWO } from "@/const";
 import { soundGameDraw, soundGameWin } from "@/config/sound-effects";
 
-interface ModalGameOverProps extends HTMLProps<HTMLDialogElement> {
+interface ModalGameOver extends HTMLProps<HTMLDialogElement> {
   title: string;
   playerNames: PlayerName;
   winner: number;
@@ -21,7 +21,7 @@ const winnerText = {
   [PLAYER_TWO]: "is-error",
 };
 
-export const ModalGameOver = forwardRef<HTMLDialogElement, ModalGameOverProps>(
+export const ModalGameOver = forwardRef<HTMLDialogElement, ModalGameOver>(
   (
     { title, close, resetGame, goToStartScreen, winner, playerNames, isDraw },
     ref,

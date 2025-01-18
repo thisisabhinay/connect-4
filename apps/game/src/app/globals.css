@@ -3,12 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #000000;
   --foreground: #171717;
 }
 
 html {
   height: 100%;
+  background: #000;
 }
 
 body {
@@ -19,4 +20,17 @@ body {
 
 main {
   height: 100%;
+}
+
+@media all and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+  .nes-input,
+  .nes-textarea {
+    border-image-repeat: round !important;
+  }
+}
+
+@media all and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+  .nes-container.is-rounded {
+    border-image-repeat: round !important;
+  }
 }
