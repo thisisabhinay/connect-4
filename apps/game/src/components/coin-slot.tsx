@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { P1, P2 } from "@repo/assets/sound";
 import { PLAYER_ONE, PLAYER_TWO } from "@/const";
 
-export interface CoinElement {
+export interface CoinSlot {
   filled?: string;
   i: number;
   j: number;
@@ -15,7 +15,7 @@ export interface CoinElement {
   value: number;
 }
 
-export function CoinElement({
+export function CoinSlot({
   filled = "",
   isAllowed,
   handlePlayerMove,
@@ -25,7 +25,7 @@ export function CoinElement({
   isGameOver,
   i,
   j,
-}: CoinElement) {
+}: CoinSlot) {
   const slotShadow: { [key: number]: string } = {
     0: "",
     1: "shadow-blue-500 ",

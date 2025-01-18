@@ -1,7 +1,7 @@
 "use client";
 
 import { GameResource, NormalKey } from "@/types/game";
-import { CoinElement } from "./coin";
+import { CoinSlot } from "./coin-slot";
 import { useGameState } from "@/hooks/use-game-state";
 import { useEffect, useRef } from "react";
 import { goToStartScreen } from "@/actions/goto-start-screen";
@@ -97,7 +97,7 @@ export function GameBoard({
                   .fill(0)
                   ?.map((col, j) => {
                     return (
-                      <CoinElement
+                      <CoinSlot
                         key={j}
                         i={i}
                         j={j}

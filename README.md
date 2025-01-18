@@ -169,9 +169,9 @@ The GameBoard component serves as the main game interface:
 - Displays game status including current player and winner
 - Handles the reset functionality for new games
 
-#### CoinElement Component
+#### CoinSlot Component
 
-The CoinElement component represents individual cells in the game grid:
+The CoinSlot component represents individual cells in the game grid:
 
 - Manages click events for piece placement
 - Provides visual feedback for:

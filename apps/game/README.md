@@ -25,7 +25,7 @@ The system uses a Next.js frontend with a JSON Server backend, structured around
 The frontend architecture splits responsibilities between stateful and presentational components:
 
 - `GameBoard`: The main component that renders the game grid and handles player interactions. It uses the `useGameState` hook to manage game logic.
-- `CoinElement`: A presentational component for individual board cells, handling the visual representation of pieces and click interactions.
+- `CoinSlot`: A presentational component for individual board cells, handling the visual representation of pieces and click interactions.
 
 ### Backend Structure
 
