@@ -1,10 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Enable transpilation of the assets package
+  transpilePackages: ["@repo/assets"],
+
   webpack: (config) => {
+    // Configure asset modules for various file types
     config.module.rules.push({
       test: /\.(mp3|wav|ogg)$/i,
+      issuer: /\.[jt]sx?$/,
       use: [
         {
           loader: "file-loader",
@@ -16,6 +20,7 @@ const nextConfig: NextConfig = {
         },
       ],
     });
+
     return config;
   },
 };

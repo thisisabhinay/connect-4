@@ -17,6 +17,20 @@
       "default": "./sounds/index.ts"
     }
   },
+  "files": [
+    "icons",
+    "images",
+    "sounds",
+    "types",
+    "index.d.ts"
+  ],
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./types/custom.d.ts"
+      ]
+    }
+  },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*"
   },
