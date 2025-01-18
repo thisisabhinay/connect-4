@@ -30,8 +30,8 @@ export default function Home() {
 
     if (game.id) {
       const url = `/game/${game.id}`;
-      router.push(url);
       setLastGame(url);
+      router.push(url);
     }
   }
 

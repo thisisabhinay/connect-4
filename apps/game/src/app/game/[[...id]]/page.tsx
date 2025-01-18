@@ -85,10 +85,10 @@ export default function GamePage() {
    * Cleans up loading states in finally block to prevent UI stuck states.
    */
   useEffect(() => {
-    async function fetchGame() {
-      setIsLoading(true);
-      setError("");
+    setError("");
+    setIsLoading(true);
 
+    async function fetchGame() {
       if (!id) {
         setIsLoading(false);
         return;
