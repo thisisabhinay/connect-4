@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { nanoid } from "nanoid";
 import axios from "axios";
 import { generateEmptyBoard } from "@/utils/game";
