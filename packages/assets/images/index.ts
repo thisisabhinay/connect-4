@@ -3,3 +3,4 @@ export { default as Logo } from "./logo.png";
 export { default as Sky } from "./sky.jpg";
 export { default as SpeakerOn } from "./speaker-on.png";
 export { default as SpeakerOff } from "./speaker-off.png";
+export { default as CryingCat } from "./crying-cat.png";
