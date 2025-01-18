@@ -1,8 +1,7 @@
 "use client";
 import { createGameSession } from "@/actions/create-game-session";
-import Image from "next/image";
-import { Logo } from "@repo/assets/image";
 import { useRouter } from "next/navigation";
+import { Header } from "@/components/header";
 
 export default function Home() {
   const router = useRouter();
@@ -17,19 +16,12 @@ export default function Home() {
   return (
     <main
       data-comp="Home"
-      className="grid grid-cols-1 auto-rows-max items-center justify-center"
+      className="grid grid-cols-1 auto-rows-max items-center justify-center bg-fixed bg-black bg-sky animate-bg bg-cover"
     >
-      <div className="flex items-center justify-center py-10">
-        <Image
-          src={Logo.src}
-          width={Math.round(Logo.width / 1.5)}
-          height={Math.round(Logo.height / 1.5)}
-          alt="Connect4 Logo"
-        />
-      </div>
+      <Header />
 
       <div className="p-8 flex items-center justify-center relative">
-        <i className="nes-octocat animate absolute z-0 -top-10" />
+        <i className="nes-octocat animate duration-500 absolute z-0 -top-10 hover:top-[-1rem]" />
         <div className="z-10 max-w-md mx-auto bg-white rounded flex flex-col gap-4 relative nes-container with-title is-rounded">
           <h1 className="nes-text is-primary text-2xl font-bold text-center mb-6">
             New Game Session

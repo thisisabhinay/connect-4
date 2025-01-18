@@ -10,7 +10,7 @@ export type WinningDirection =
   | "antiDiagonal";
 
 export type NormalKey = `${number}_${number}`;
-
+export type PlayerName = { [key: number]: string };
 export interface NormalizedGameState {
   [key: NormalKey]: number;
 }
@@ -24,10 +24,7 @@ export interface Game {
   isGameOver: boolean;
   winner: number;
   winningCells: Position[];
-  playerNames: {
-    1: string;
-    2: string;
-  };
+  playerNames: PlayerName;
 }
 
 export interface GameResource extends Game {

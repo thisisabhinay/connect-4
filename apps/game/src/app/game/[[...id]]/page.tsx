@@ -1,10 +1,9 @@
 "use client";
 
 import { GameBoard } from "@/components/game-board";
+import { Header } from "@/components/header";
 import { GameResource } from "@/types/game";
-import { Logo } from "@repo/assets/image";
 import axios from "axios";
-import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -15,6 +14,9 @@ export default function GamePage() {
   const [game, setGame] = useState<GameResource>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>("");
+  const [activePlayer, setActivePlayer] = useState<number>(
+    game?.activePlayer ?? 0,
+  );
 
   useEffect(() => {
     async function fetchGame() {
@@ -42,36 +44,60 @@ export default function GamePage() {
     fetchGame();
   }, [id]);
 
-  useEffect(() => {
-    document.body.classList.remove("animate-bg");
-    document.body.classList.add("bg-landscape");
-    document.body.classList.add("bg-right");
-  }, []);
-
   return (
     <main
       data-comp="GamePage"
-      className="grid grid-cols-1 auto-rows-max items-center justify-center"
+      className="grid grid-cols-1 auto-rows-max items-center justify-center bg-fixed bg-black bg-landscape bg-right animate-bg bg-cover"
     >
-      <div className="flex items-center justify-center py-10">
-        <Image
-          src={Logo.src}
-          width={Math.round(Logo.width / 1.5)}
-          height={Math.round(Logo.height / 1.5)}
-          alt="Connect4 Logo"
-        />
-      </div>
-      <h1 className="text-5xl text-center font-bold">Connect4</h1>
+      <Header />
 
-      {isLoading ? (
-        <div className="text-center">Loading game...</div>
-      ) : error ? (
-        <div className="text-red-500 text-center">{error}</div>
-      ) : game?.id ? (
-        <GameBoard {...game} />
-      ) : (
-        <div className="text-center">No game found</div>
-      )}
+      {isLoading ? <div className="text-center">Loading game...</div> : null}
+
+      {error ? <div className="text-red-500 text-center">{error}</div> : null}
+
+      {game?.id ? (
+        <div className="h-full max-w-screen-xl mx-auto grid md:grid-cols-[auto_max-content_auto] grid-rows-[1fr] gap-10 justify-center md:px-10 xl:px-20 pb-20">
+          <section className="message-list relative self-center justify-self-end">
+            <section className="message -left">
+              <div className="flex flex-col gap-2 items-center">
+                <i className="nes-charmander scale-x-[-1]" />
+                <i className="nes-badge">
+                  <span className="is-primary">P1: {game.playerNames[1]}</span>
+                </i>
+              </div>
+              {activePlayer === 1 ? (
+                <div className="nes-balloon from-right absolute -top-28 -left-28">
+                  <p>My turn</p>
+                </div>
+              ) : null}
+            </section>
+          </section>
+          <div className="relative">
+            <i className="nes-octocat animate duration-500 absolute z-0 top-10 -left-14 -rotate-[56deg] hover:left-[-2.5rem]" />
+            <GameBoard
+              {...game}
+              onPlayerUpdateAction={(activePlayer) =>
+                setActivePlayer(activePlayer)
+              }
+            />
+          </div>
+          <section className="message-list relative self-center justify-self-start">
+            <section className="message -left">
+              <div className="flex flex-col gap-2 items-center">
+                <i className="nes-kirby" />
+                <i className="nes-badge">
+                  <span className="is-error">P2: {game.playerNames[2]}</span>
+                </i>
+              </div>
+              {activePlayer === 2 ? (
+                <div className="nes-balloon from-left absolute -top-28 -right-28">
+                  <p>My turn</p>
+                </div>
+              ) : null}
+            </section>
+          </section>
+        </div>
+      ) : null}
     </main>
   );
 }

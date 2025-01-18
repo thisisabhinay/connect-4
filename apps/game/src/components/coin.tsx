@@ -50,6 +50,7 @@ export function CoinElement({
         isWinningCell ? "shadow-xl" : "shadow-md",
         "cursor-pointer border-8 rounded-full !border-slate-800/20",
         "transition-all duration-200 ease-out",
+        "flex-shrink-0",
         isWinningCell
           ? isGameOver
             ? "!cursor-not-allowed opacity-100"

@@ -16,3 +16,7 @@ body {
   background: var(--background);
   font-family: var(--font-press-start-2p);
 }
+
+main {
+  height: 100%;
+}

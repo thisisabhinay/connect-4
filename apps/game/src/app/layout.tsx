@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Press_Start_2P } from "next/font/google";
 import "@/vendor/css/nes.css";
 import "./globals.css";
-import { BackgroundMusic } from "@/components/background-music";
 
 const pressStart2P = Press_Start_2P({
   weight: "400",
@@ -23,17 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${pressStart2P.variable} antialiased bg-black bg-sky animate-bg bg-cover bg-right h-full`}
-      >
-        <div className="flex flex-row-reverse items-center gap-6 px-6 md:absolute w-full justify-center md:justify-start">
-          <a
-            href="https://github.com/thisisabhinay/connect-4"
-            target="_blank"
-            className="nes-icon github is-large"
-          />
-          <BackgroundMusic />
-        </div>
+      <body className={`${pressStart2P.variable} antialiased  h-full`}>
         {children}
       </body>
     </html>
