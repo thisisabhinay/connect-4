@@ -7,7 +7,7 @@ import { PLAYER_ONE, PLAYER_TWO } from "@/const";
 import { soundGameDraw, soundGameWin } from "@/config/sound-effects";
 
 /**
- * Modal dialog shown when a Tic-tac-toe game ends, displaying the winner or draw state.
+ * Modal dialog shown when the game ends, displaying the winner or draw state.
  * Controls sound effects, winner animations, and provides game reset/exit options.
  *
  * @param title        - Header text displayed at top of modal
